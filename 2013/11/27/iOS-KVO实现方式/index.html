@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS KVO实现方式 | 桉远的技术博客</title>
+  <title>iOS KVO实现方式 | Anyuan&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="KVO 也许是iOS中“最神奇”的部分了，因为你不需要在被观察对象中添加任何代码，就可以实现对被观察对象属性改变的通知。KVO究竟是怎么实现的？
 KVO是通过Objective－C的runtime来实现的。当你第一次要对一个对象进行观察时，runtime会为你创建一个被观察对象class的subclass。在这个新创建的subclass中，KVO会复写所要观察属性的setter方法，然后转换被观察">
 <meta property="og:type" content="article">
 <meta property="og:title" content="iOS KVO实现方式">
 <meta property="og:url" content="http://yoursite.com/2013/11/27/iOS-KVO实现方式/index.html">
-<meta property="og:site_name" content="桉远的技术博客">
+<meta property="og:site_name" content="Anyuan's blog">
 <meta property="og:description" content="KVO 也许是iOS中“最神奇”的部分了，因为你不需要在被观察对象中添加任何代码，就可以实现对被观察对象属性改变的通知。KVO究竟是怎么实现的？
 KVO是通过Objective－C的runtime来实现的。当你第一次要对一个对象进行观察时，runtime会为你创建一个被观察对象class的subclass。在这个新创建的subclass中，KVO会复写所要观察属性的setter方法，然后转换被观察">
 <meta property="og:updated_time" content="2021-01-31T08:27:44.290Z">
@@ -19,7 +19,7 @@ KVO是通过Objective－C的runtime来实现的。当你第一次要对一个对
 <meta name="twitter:description" content="KVO 也许是iOS中“最神奇”的部分了，因为你不需要在被观察对象中添加任何代码，就可以实现对被观察对象属性改变的通知。KVO究竟是怎么实现的？
 KVO是通过Objective－C的runtime来实现的。当你第一次要对一个对象进行观察时，runtime会为你创建一个被观察对象class的subclass。在这个新创建的subclass中，KVO会复写所要观察属性的setter方法，然后转换被观察">
   
-    <link rel="alternative" href="/atom.xml" title="桉远的技术博客" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Anyuan&#39;s blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -37,12 +37,8 @@ KVO是通过Objective－C的runtime来实现的。当你第一次要对一个对
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">桉远的技术博客</a>
+        <a href="/" id="logo">Anyuan&#39;s blog</a>
       </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">Stay hungry, stay foolish.</a>
-        </h2>
       
     </div>
     <div id="header-inner" class="inner">
@@ -116,7 +112,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/27/iOS-KVO实现方式/" data-id="ckkl0djtu00112j9bgxi2mzdr" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/11/27/iOS-KVO实现方式/" data-id="ckkl0fuop0011nc9b1spi7018" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
