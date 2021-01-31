@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>iOS LLDB console debug总结 | 桉远的技术博客</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Xcode’s debugging console window is a full-featured LLDB debugging console. When your app is paused(at a breakpoint), the debugging console shows the LLDB command prompt. You can type any LLDB debugge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS LLDB console debug总结">
+<meta property="og:url" content="http://yoursite.com/2013/11/05/iOS-LLDB-console-debug总结/index.html">
+<meta property="og:site_name" content="桉远的技术博客">
+<meta property="og:description" content="Xcode’s debugging console window is a full-featured LLDB debugging console. When your app is paused(at a breakpoint), the debugging console shows the LLDB command prompt. You can type any LLDB debugge">
+<meta property="og:updated_time" content="2021-01-31T08:27:44.290Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS LLDB console debug总结">
+<meta name="twitter:description" content="Xcode’s debugging console window is a full-featured LLDB debugging console. When your app is paused(at a breakpoint), the debugging console shows the LLDB command prompt. You can type any LLDB debugge">
+  
+    <link rel="alternative" href="/atom.xml" title="桉远的技术博客" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  
+
+</head>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">桉远的技术博客</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Stay hungry, stay foolish.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">home</a>
+        
+          <a class="main-nav-link" href="/archives">archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-iOS-LLDB-console-debug总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/11/05/iOS-LLDB-console-debug总结/" class="article-date">
+  <time datetime="2013-11-05T08:10:31.000Z" itemprop="datePublished">2013-11-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      iOS LLDB console debug总结
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Xcode’s debugging console window is a full-featured LLDB debugging console. When your app is paused(at a breakpoint), the debugging console shows the LLDB command prompt. You can type any LLDB debugger common into the console to help you with debugging, including loading external python script.</p>
+<p>The most frequently used command is po, which stands for print object. When your application is paused in debugger, you can print any variable that is in the current scope. This includes any stack variables, class variables, properties, ivars, and global variables. In short, any variable that is accessible by your application at the breakpoint can be accessed via the debugging console.</p>
+<p><strong>Printing scalar variables</strong></p>
+<p>when you’re dealing with scalars like integers or structs(CGRect, CGPoint, etc..), instead of using po, you use p, followed by the type of struct.</p>
+<pre><code><span class="tag">p</span> (int) self<span class="class">.myAge</span>
+
+<span class="tag">p</span> (CGPoint) self<span class="class">.view</span><span class="class">.center</span>
+</code></pre><p><strong>Printing Registers</strong></p>
+<p>Registers in your CPU are used for storing variables that have to be accessed frequently. Compilers optimize frequently used variables like the loop variable, method arguments, and return variables in the registers. When your app crashes for no apparent reason, probing the register for the method name or the selector name that crashed your app will be very useful.</p>
+<pre><code>(lldb) <span class="keyword">register</span> <span class="keyword">read</span>
+</code></pre><p>General Purpose Registers:</p>
+<pre><code>  r0 = <span class="number">0x37c9cb21</span>  libobjc.A.dylib`objc_msgSend + <span class="number">1</span>
+
+  r1 = <span class="number">0x37c9cb21</span>  libobjc.A.dylib`objc_msgSend + <span class="number">1</span>
+
+  r2 = <span class="number">0x01b5c214</span>  <span class="string">"idKey"</span>
+
+  r3 = <span class="number">0x01b5eb28</span>  <span class="string">"checkCurrentContactBean"</span>
+
+  r4 = <span class="number">0x00000000</span>
+
+  r5 = <span class="number">0x37c9cb21</span>  libobjc.A.dylib`objc_msgSend + <span class="number">1</span>
+
+  r6 = <span class="number">0x27d09bd0</span>
+
+  r7 = <span class="number">0x27d09bc8</span>
+
+  r8 = <span class="number">0x01b5bbc4</span>  <span class="string">"view"</span>
+
+  r9 = <span class="number">0x00000000</span>
+
+ r10 = <span class="number">0x01b5e3f8</span>  <span class="string">"masterViewController"</span>
+
+ r11 = <span class="number">0x00000000</span>
+
+ r12 = <span class="number">0x3a11c1d0</span>  (<span class="keyword">void</span> *)<span class="number">0x382c3959</span>: _os_lock_handoff_unlock$VARIANT$mp + <span class="number">1</span>
+
+  sp = <span class="number">0x27d09358</span>
+
+  lr = <span class="number">0x37cacabb</span>  libobjc.A.dylib`objc_object::sidetable_release(<span class="keyword">bool</span>) + <span class="number">95</span>
+
+  pc = <span class="number">0x002cce40</span>  iPoS_IOS`-[PersonMainForm viewWillAppear:] + <span class="number">232</span> at PersonMainForm.m:<span class="number">59</span>
+
+cpsr = <span class="number">0x60000030</span>
+</code></pre><p>Your output may vary, butt pay close attention to the wax, dcx, and esi on the simulator or r0-r4 registers when running on a device. These registers store some of the values that you’re interested in. In the Simulator, the dcx register holds the name of the selector that is called when your app crashed. You print an individual register to console by specifying the register name as shown below<br>    register read ecx.</p>
+<p>You can also specify multiple registers like</p>
+<pre><code><span class="keyword">register</span>  <span class="keyword">read</span> eax ecx.
+</code></pre><p>The dcx register on Intel architecture and the r15 register on ARM architecture hold the program counter. Printing the address of the program counter will show the last executed instruction. Similarly, wax(r0 on ARM) holds the receiver address, ecx (r4 on ARM) and holds the selector that was called last. The arguments to the methods are stored in registers r1-r3. If your selector has more than three arguments, they are stored on stack, accessible via the stack pointer(r13). sp, lr, and pc are actually aliases to the r13,r14 and r15 register, respectively. Hence, register read r13 is equivalent to register read sp.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/11/05/iOS-LLDB-console-debug总结/" data-id="ckkkvyt9c000u2l9bgjx2005r" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2013/11/05/iOS-Crash类别总结/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          iOS Crash类别总结
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2013/10/29/iOS-KVO-Key-Value-Observing-总结/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS KVO(Key-Value Observing)总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/C/" style="font-size: 16.67px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2015/12/26/iOS应用文件路径简介-md/">iOS应用文件路径简介</a>
+          </li>
+        
+          <li>
+            <a href="/2015/10/02/Protocol-Extensions/">Protocol Extensions</a>
+          </li>
+        
+          <li>
+            <a href="/2015/09/13/iOS-7-9-新特性总结/">iOS 7 - 9 新特性总结</a>
+          </li>
+        
+          <li>
+            <a href="/2015/08/08/SQLite-WAL-调研总结/">SQLite WAL 调研总结</a>
+          </li>
+        
+          <li>
+            <a href="/2014/12/10/NSAutoreleasePool-实现原理/">NSAutoreleasePool 实现原理</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Anyuan<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">home</a>
+  
+    <a href="/archives" class="mobile-nav-link">archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css" type="text/css">
+  <script src="/fancybox/jquery.fancybox.pack.js" type="text/javascript"></script>
+
+
+<script src="/js/script.js" type="text/javascript"></script>
+
+  </div>
+</body>
+</html>
