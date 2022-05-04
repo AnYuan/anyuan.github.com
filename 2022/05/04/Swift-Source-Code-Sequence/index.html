@@ -3,33 +3,18 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS View Controller Lifecycle | Anyuan&#39;s blog</title>
+  <title>Swift Source Code: Sequence | Anyuan&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ViewDidLoad:
-After instantiation and outlet-setting, viewDidLoad is called, this is an exceptionally good place to put a lot of setup code.
--(void)viewDidLoad
-{
-
-[super viewDidLoad];//always let super">
+  <meta name="description" content="Functionssuffix(_ maxLength: Int)123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354/// Returns a subsequence, up to the given maximum length, containin">
 <meta property="og:type" content="article">
-<meta property="og:title" content="iOS View Controller Lifecycle">
-<meta property="og:url" content="http://yoursite.com/2013/05/27/iOS-View-Controller-Lifecycle/index.html">
+<meta property="og:title" content="Swift Source Code: Sequence">
+<meta property="og:url" content="http://yoursite.com/2022/05/04/Swift-Source-Code-Sequence/index.html">
 <meta property="og:site_name" content="Anyuan's blog">
-<meta property="og:description" content="ViewDidLoad:
-After instantiation and outlet-setting, viewDidLoad is called, this is an exceptionally good place to put a lot of setup code.
--(void)viewDidLoad
-{
-
-[super viewDidLoad];//always let super">
-<meta property="og:updated_time" content="2021-01-31T08:27:44.290Z">
+<meta property="og:description" content="Functionssuffix(_ maxLength: Int)123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354/// Returns a subsequence, up to the given maximum length, containin">
+<meta property="og:updated_time" content="2022-05-04T03:32:17.105Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS View Controller Lifecycle">
-<meta name="twitter:description" content="ViewDidLoad:
-After instantiation and outlet-setting, viewDidLoad is called, this is an exceptionally good place to put a lot of setup code.
--(void)viewDidLoad
-{
-
-[super viewDidLoad];//always let super">
+<meta name="twitter:title" content="Swift Source Code: Sequence">
+<meta name="twitter:description" content="Functionssuffix(_ maxLength: Int)123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354/// Returns a subsequence, up to the given maximum length, containin">
   
     <link rel="alternative" href="/atom.xml" title="Anyuan&#39;s blog" type="application/atom+xml">
   
@@ -75,10 +60,10 @@ After instantiation and outlet-setting, viewDidLoad is called, this is an except
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-iOS-View-Controller-Lifecycle" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-Swift-Source-Code-Sequence" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2013/05/27/iOS-View-Controller-Lifecycle/" class="article-date">
-  <time datetime="2013-05-27T15:31:52.000Z" itemprop="datePublished">2013-05-27</time>
+    <a href="/2022/05/04/Swift-Source-Code-Sequence/" class="article-date">
+  <time datetime="2022-05-04T03:23:21.000Z" itemprop="datePublished">2022-05-04</time>
 </a>
     
   </div>
@@ -89,7 +74,7 @@ After instantiation and outlet-setting, viewDidLoad is called, this is an except
         
   
     <h1 class="article-title" itemprop="name">
-      iOS View Controller Lifecycle
+      Swift Source Code: Sequence
     </h1>
   
 
@@ -97,51 +82,14 @@ After instantiation and outlet-setting, viewDidLoad is called, this is an except
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><code>ViewDidLoad</code>:</p>
-<p>After instantiation and outlet-setting, viewDidLoad is called, this is an exceptionally good place to put a lot of setup code.</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">viewDidLoad</span>
-{
-
-<span class="attr_selector">[super viewDidLoad]</span>;<span class="comment">//always let super have a chance in lifecycle methods</span>
-
-<span class="comment">//do some setup of my MVC</span>
-}
-</code></pre><p>But be careful because the geometry of your view(its bounds) is not set yet!</p>
-<p><code>viewWillAppear:(BOOL)animated</code>:</p>
-<p>Just before the view appears on screen, you get notified</p>
-<p>(argument is just whether you are appearing instantly or over time via animation)</p>
-<p>Your view will only get “loaded” once, but it might appear and disappear a lot. So don’t put something in this method that really wants to be in viewDidLoad. Otherwise, you might be doing something over and over unnecessarily.</p>
-<p>Do something here if things you display are changing while your MVC is off-screen.</p>
-<p>Summary: This method is for geometry-related initialization, lazy execution and late updating.</p>
-<p><code>-(void)viewWillDisappear:(BOOL)animated</code></p>
-<p>You get notified when you will disappear off screen, this is where you put “remember what’s going on” and cleanup code.</p>
-<pre><code><span class="tag">-</span>(void)<span class="tag">viewWillDisappear</span>:(BOOL)<span class="tag">animated</span>
-
-{
-
-<span class="attr_selector">[super viewWillDisappear:animated]</span>;<span class="comment">//call super in all the viewWill/Did... methods</span>
-
-<span class="comment">//let's be nice to the user and remember the scroll position they were at...</span>
-
-<span class="attr_selector">[self saveDataToPermanentStore]</span>;<span class="comment">//maybe do in did instead?</span>
-
-<span class="comment">//but be careful not to do anything time-consuming here, or app will be sluggish</span>
-
-<span class="comment">//maybe even kick off a thread to do what needs doing here</span>
-
-}
-</code></pre><p>In ios with AutoLayout, you have to do such stuff in <code>viewDidLayoutSubviews</code> (also previously mentioned).  <code>viewDidLayoutSubviews</code> is the method sent to you after constraints have been processed.Note that while <code>viewWillAppear:</code> will get called only as you go (back) on screen…</p>
-<p><code>viewDidLayoutSubviews</code> is called every time self.view’s bounds changes (i.e. more ofter). This makes perfect sense when you think about it.</p>
-<p>Doing geometry-dependent stuff in <code>viewWillAppear:</code> is an artifact from the days when</p>
-<p>a) there was no Autolayout and b) there was no viewDidLayoutSubviews!</p>
-
+        <h1 id="Functions">Functions</h1><h2 id="suffix(__maxLength:_Int)">suffix(_ maxLength: Int)</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// Returns a subsequence, up to the given maximum length, containing the</span></span><br><span class="line"><span class="comment">/// final elements of the sequence.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// The sequence must be finite. If the maximum length exceeds the number of</span></span><br><span class="line"><span class="comment">/// elements in the sequence, the result contains all the elements in the</span></span><br><span class="line"><span class="comment">/// sequence.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///     let numbers = [1, 2, 3, 4, 5]</span></span><br><span class="line"><span class="comment">///     print(numbers.suffix(2))</span></span><br><span class="line"><span class="comment">///     // Prints "[4, 5]"</span></span><br><span class="line"><span class="comment">///     print(numbers.suffix(10))</span></span><br><span class="line"><span class="comment">///     // Prints "[1, 2, 3, 4, 5]"</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Parameter maxLength: The maximum number of elements to return. The</span></span><br><span class="line"><span class="comment">///   value of `maxLength` must be greater than or equal to zero.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Complexity: O(*n*), where *n* is the length of the sequence.</span></span><br><span class="line">@inlinable</span><br><span class="line"><span class="keyword">public</span> __consuming <span class="func"><span class="keyword">func</span> <span class="title">suffix</span><span class="params">(<span class="number">_</span> maxLength: Int)</span></span> -&gt; [<span class="type">Element</span>] &#123;</span><br><span class="line">  _Precondition(maxLength &gt;= <span class="number">0</span>, <span class="string">"Can't take a suffix of negative length from a sequence"</span>)</span><br><span class="line">  <span class="keyword">guard</span> maxLength != <span class="number">0</span> <span class="keyword">else</span> &#123; <span class="keyword">return</span> [] &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// <span class="doctag">FIXME:</span> &lt;rdar://problem/21885650&gt; Create reusable RingBuffer&lt;T&gt;</span></span><br><span class="line">  <span class="comment">// Put incoming elements into a ring buffer to save space. Once all</span></span><br><span class="line">  <span class="comment">// elements are consumed, reorder the ring buffer into a copy and return it.</span></span><br><span class="line">  <span class="comment">// This saves memory for sequences particularly longer than `maxLength`.</span></span><br><span class="line">  <span class="comment">// 这里提到[RingBuffer](https://en.wikipedia.org/wiki/Circular_buffer)这个数据结构用于节省空间，这块还是值得注意的。因为如果使用正常的Array或者ContiguousArray，会创建一个和self本身同等大小的array，而使用RingBuffer则只会使用maxLength大小的空间.</span></span><br><span class="line">  <span class="comment">// 已经有相关RingBuffer(CircularBuffer)实现的[PR](https://github.com/apple/swift/pull/30242/files)，最终没有merge到main</span></span><br><span class="line">  <span class="keyword">var</span> ringBuffer = <span class="type">ContiguousArray</span>&lt;<span class="type">Element</span>&gt;()</span><br><span class="line">  ringBuffer.reserveCapacity(<span class="type">Swift</span>.<span class="built_in">min</span>(maxLength, underestimatedCount))</span><br><span class="line"></span><br><span class="line">  <span class="keyword">var</span> i = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> ringBuffer.<span class="built_in">count</span> &lt; maxLength &#123;</span><br><span class="line">      ringBuffer.append(element)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      <span class="comment">// RingBuffer相关操作，只保留buffer大小的数据，其他数据进行覆盖</span></span><br><span class="line">      ringBuffer[i] = element</span><br><span class="line">      i = (i + <span class="number">1</span>) % maxLength</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> i != ringBuffer.startIndex &#123;</span><br><span class="line">    <span class="comment">// Rotate RingBuffer</span></span><br><span class="line">    <span class="keyword">var</span> rotated = <span class="type">ContiguousArray</span>&lt;<span class="type">Element</span>&gt;()</span><br><span class="line">    rotated.reserveCapacity(ringBuffer.<span class="built_in">count</span>)</span><br><span class="line">    rotated += ringBuffer[i..&lt;ringBuffer.endIndex]</span><br><span class="line">    rotated += ringBuffer[<span class="number">0</span>..&lt;i]</span><br><span class="line">    <span class="keyword">return</span> <span class="type">Array</span>(rotated)</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="type">Array</span>(ringBuffer)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/05/27/iOS-View-Controller-Lifecycle/" data-id="cl2r0yyap000x8ccoikdibmr0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2022/05/04/Swift-Source-Code-Sequence/" data-id="cl2r0yyb6001q8cco1jj20ik7" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swift/">swift</a></li></ul>
 
     </footer>
   </div>
@@ -149,19 +97,10 @@ After instantiation and outlet-setting, viewDidLoad is called, this is an except
     
 <nav id="article-nav">
   
-    <a href="/2013/06/03/iOS-中文英文字符集/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          iOS 中文英文字符集
-        
-      </div>
-    </a>
   
-  
-    <a href="/2013/05/21/emacs-and-vim-配置文件/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2021/03/29/Reading-Note-of-Book-Deep-Work/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">emacs and vim 配置文件</div>
+      <div class="article-nav-title">Reading Note of Book: Deep Work</div>
     </a>
   
 </nav>
