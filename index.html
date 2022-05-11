@@ -61,6 +61,45 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Swift-Source-Code-Collection" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2022/05/11/Swift-Source-Code-Collection/" class="article-date">
+  <time datetime="2022-05-11T11:27:18.000Z" itemprop="datePublished">2022-05-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2022/05/11/Swift-Source-Code-Collection/">Swift Source Code: Collection</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Summary">Summary</h1><p>Collection extends Sequence. It guarantees that the sequence is multi-pass, and it allows you to look up elements by their indices. It also adds slicing capabilities via its SubSequence type, which is a collection itself.</p>
+<h1 id="Functions">Functions</h1><h2 id="randomeElement">randomeElement</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line">  <span class="comment">/// 这两个方法我觉得可以用在测试代码中，如可以方便的随机选取登陆用户账号密码用于测试，或者随机一个dataset传入要测试的方法中</span></span><br><span class="line">  @inlinable</span><br><span class="line">  <span class="keyword">public</span> <span class="func"><span class="keyword">func</span> <span class="title">randomElement</span><span class="generics">&lt;T: RandomNumberGenerator&gt;</span><span class="params">(</span><br><span class="line">    using generator: <span class="keyword">inout</span> T</span><br><span class="line">  )</span></span> -&gt; <span class="type">Element</span>? &#123;</span><br><span class="line">    <span class="keyword">guard</span> !isEmpty <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="literal">nil</span> &#125;</span><br><span class="line">    <span class="keyword">let</span> random = <span class="type">Int</span>.random(<span class="keyword">in</span>: <span class="number">0</span> ..&lt; <span class="built_in">count</span>, using: &amp;generator)</span><br><span class="line">    <span class="keyword">let</span> idx = index(startIndex, offsetBy: random)</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">self</span>[idx]</span><br><span class="line">  &#125;</span><br><span class="line">  @inlinable</span><br><span class="line">  <span class="keyword">public</span> <span class="func"><span class="keyword">func</span> <span class="title">randomElement</span><span class="params">()</span></span> -&gt; <span class="type">Element</span>? &#123;</span><br><span class="line">    <span class="keyword">var</span> g = <span class="type">SystemRandomNumberGenerator</span>()</span><br><span class="line">    <span class="keyword">return</span> randomElement(using: &amp;g)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">/// The system's default source of random data.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// When you generate random values, shuffle a collection, or perform another</span></span><br><span class="line"><span class="comment">/// operation that depends on random data, this type is the generator used by</span></span><br><span class="line"><span class="comment">/// default. For example, the two method calls in this example are equivalent:</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///     let x = Int.random(in: 1...100)</span></span><br><span class="line"><span class="comment">///     var g = SystemRandomNumberGenerator()</span></span><br><span class="line"><span class="comment">///     let y = Int.random(in: 1...100, using: &amp;g)</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// `SystemRandomNumberGenerator` is automatically seeded, is safe to use in</span></span><br><span class="line"><span class="comment">/// multiple threads, and uses a cryptographically secure algorithm whenever</span></span><br><span class="line"><span class="comment">/// possible.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// Platform Implementation of `SystemRandomNumberGenerator`</span></span><br><span class="line"><span class="comment">/// ========================================================</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// While the system generator is automatically seeded and thread-safe on every</span></span><br><span class="line"><span class="comment">/// platform, the cryptographic quality of the stream of random data produced by</span></span><br><span class="line"><span class="comment">/// the generator may vary. For more detail, see the documentation for the APIs</span></span><br><span class="line"><span class="comment">/// used by each platform.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Apple platforms use `arc4random_buf(3)`.</span></span><br><span class="line"><span class="comment">/// - Linux platforms use `getrandom(2)` when available; otherwise, they read</span></span><br><span class="line"><span class="comment">///   from `/dev/urandom`.</span></span><br><span class="line"><span class="comment">/// - Windows uses `BCryptGenRandom`</span></span><br><span class="line">  @frozen</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">struct</span> <span class="title">SystemRandomNumberGenerator</span>: <span class="title">RandomNumberGenerator</span>, <span class="title">Sendable</span> </span>&#123;</span><br><span class="line">  <span class="comment">/// Creates a new instance of the system's default random number generator.</span></span><br><span class="line">  @inlinable</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">init</span>() &#123; &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">/// Returns a value from a uniform, independent distribution of binary data.</span></span><br><span class="line">  <span class="comment">///</span></span><br><span class="line">  <span class="comment">/// - Returns: An unsigned 64-bit random value.</span></span><br><span class="line">  @inlinable</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">mutating</span> <span class="func"><span class="keyword">func</span> <span class="title">next</span><span class="params">()</span></span> -&gt; <span class="type">UInt64</span> &#123;</span><br><span class="line">    <span class="keyword">var</span> random: <span class="type">UInt64</span> = <span class="number">0</span></span><br><span class="line">    swift_stdlib_random(&amp;random, <span class="type">MemoryLayout</span>&lt;<span class="type">UInt64</span>&gt;.size)</span><br><span class="line">    <span class="keyword">return</span> random</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="popFirst">popFirst</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// Removes and returns the first element of the collection.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Returns: The first element of the collection if the collection is</span></span><br><span class="line"><span class="comment">///   not empty; otherwise, `nil`.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Complexity: O(1)</span></span><br><span class="line">@inlinable</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">mutating</span> <span class="func"><span class="keyword">func</span> <span class="title">popFirst</span><span class="params">()</span></span> -&gt; <span class="type">Element</span>? &#123;</span><br><span class="line">  <span class="comment">// <span class="doctag">TODO:</span> swift-3-indexing-model - review the following</span></span><br><span class="line">  <span class="keyword">guard</span> !isEmpty <span class="keyword">else</span> &#123; <span class="keyword">return</span> <span class="literal">nil</span> &#125;</span><br><span class="line">  <span class="comment">/// 一定有倔种来告诉我，我们在swift不推荐使用“!”</span></span><br><span class="line">  <span class="keyword">let</span> element = first!</span><br><span class="line">  <span class="comment">/// 你删除first这么带劲吗？</span></span><br><span class="line">  <span class="keyword">self</span> = <span class="keyword">self</span>[index(after: startIndex)..&lt;endIndex]</span><br><span class="line">  <span class="keyword">return</span> element</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="isEmpty">isEmpty</h2><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// isEmpty 有什么值得写的？请认真看看下面的注视</span></span><br><span class="line"><span class="comment">/// A Boolean value indicating whether the collection is empty.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// When you need to check whether your collection is empty, use the</span></span><br><span class="line"><span class="comment">/// `isEmpty` property instead of checking that the `count` property is</span></span><br><span class="line"><span class="comment">/// equal to zero. For collections that don't conform to</span></span><br><span class="line"><span class="comment">/// `RandomAccessCollection`, accessing the `count` property iterates</span></span><br><span class="line"><span class="comment">/// through the elements of the collection.</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">///     let horseName = "Silver"</span></span><br><span class="line"><span class="comment">///     if horseName.isEmpty &#123;</span></span><br><span class="line"><span class="comment">///         print("My horse has no name.")</span></span><br><span class="line"><span class="comment">///     &#125; else &#123;</span></span><br><span class="line"><span class="comment">///         print("Hi ho, \(horseName)!")</span></span><br><span class="line"><span class="comment">///     &#125;</span></span><br><span class="line"><span class="comment">///     // Prints "Hi ho, Silver!")</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Complexity: O(1)</span></span><br><span class="line">@inlinable</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">var</span> isEmpty: <span class="type">Bool</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> startIndex == endIndex</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2022/05/11/Swift-Source-Code-Collection/" data-id="cl31jcwdi001t1gz6qw6v2g7m" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Swift-Source-Code-Sequence" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2022/05/04/Swift-Source-Code-Sequence/" class="article-date">
@@ -91,7 +130,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2022/05/04/Swift-Source-Code-Sequence/" data-id="cl2r0yyb6001q8cco1jj20ik7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2022/05/04/Swift-Source-Code-Sequence/" data-id="cl31jcwdg001q1gz6tse8312t" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/swift/">swift</a></li></ul>
@@ -201,7 +240,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/03/29/Reading-Note-of-Book-Deep-Work/" data-id="cl2r0yyb7001w8ccoz3hq5ipj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2021/03/29/Reading-Note-of-Book-Deep-Work/" data-id="cl31jcwdl001x1gz6hqs9w0b7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/读书/">读书</a></li></ul>
@@ -242,7 +281,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2021/01/31/又开始写博客了/" data-id="cl2r0yy9x00098ccoxatt5kpn" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2021/01/31/又开始写博客了/" data-id="cl31jcwc200091gz6zah3wm4m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/life/">life</a></li></ul>
@@ -297,7 +336,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/12/26/iOS应用文件路径简介-md/" data-id="cl2r0yyad000i8ccoy9w571g2" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/12/26/iOS应用文件路径简介-md/" data-id="cl31jcwcg000i1gz67hqaxhvb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -360,7 +399,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/02/Protocol-Extensions/" data-id="cl2r0yyb8001z8ccoq5zdnjs4" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/02/Protocol-Extensions/" data-id="cl31jcwdn00201gz6yycvkc03" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
@@ -464,7 +503,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/13/iOS-7-9-新特性总结/" data-id="cl2r0yyay001d8ccoulcy00sx" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/13/iOS-7-9-新特性总结/" data-id="cl31jcwd4001d1gz6a9pnrwpm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -532,7 +571,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/08/SQLite-WAL-调研总结/" data-id="cl2r0yyb7001t8ccoph7f8z8m" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/08/SQLite-WAL-调研总结/" data-id="cl31jcwdk001u1gz6ncuezssn" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQLite/">SQLite</a></li></ul>
@@ -576,7 +615,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl2r0yybd00268cco1btdy42k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl31jcwdy00271gz6cat8o8gz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -640,65 +679,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl2r0yy8g00008ccotyutvmjl" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS-企业证书签名包ipa无线安装服务器搭建注意事项" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" class="article-date">
-  <time datetime="2014-08-26T08:26:34.000Z" itemprop="datePublished">2014-08-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/">iOS 企业证书签名包ipa无线安装服务器搭建注意事项</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>因为iOS 7.1以后要求链接地址为https(itms-services://?action=download-manifest&amp;url=<a href="https://10.208.99.199/ota/ios/plist/8239)，所以apache服务器要开启https，具体步骤参见：http://www.cnblogs.com/y500/p/3596473.html" target="_blank" rel="external">https://10.208.99.199/ota/ios/plist/8239)，所以apache服务器要开启https，具体步骤参见：http://www.cnblogs.com/y500/p/3596473.html</a></li>
-</ol>
-<p>在以上步骤需要注意的是，生成SSL证书时，输入的common name要以服务器地址名称一致，如10.208.99.199或者域名，或者</p>
-<pre><code>10.<span class="keyword">*</span>.<span class="keyword">*</span>.<span class="keyword">*</span>
-</code></pre><p> 通配符形式。</p>
-<ol>
-<li><p>apache配置文件httpd.conf, httpd-ssl.conf, httpd-vhost.conf三个文件中的ServerName 都要配成与证书适配的名称，如10.208.99.199， 此处一定要保持一致。</p>
-</li>
-<li><p>在apache httpd.conf配置文件中添加</p>
-<pre><code><span class="keyword">AddType </span>application/octet-<span class="keyword">stream </span>ipa
-</code></pre></li>
-</ol>
-<p>, 是为Mac OS X上的配置，其他请上网查阅一下。</p>
-<ol>
-<li><p>启动apache服务器</p>
-<pre><code>sudo apachectl -<span class="keyword">D</span> SSL -k restart
-</code></pre></li>
-</ol>
-<p>通过以上配置，应该是可以搭建无线安装ipa的服务器了。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl2r0yyai000r8cco0x6wpom9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl31jcwax00001gz6lqw7rtn9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -743,7 +724,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -753,6 +734,10 @@
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/05/11/Swift-Source-Code-Collection/">Swift Source Code: Collection</a>
+          </li>
         
           <li>
             <a href="/2022/05/04/Swift-Source-Code-Sequence/">Swift Source Code: Sequence</a>
@@ -768,10 +753,6 @@
         
           <li>
             <a href="/2015/12/26/iOS应用文件路径简介-md/">iOS应用文件路径简介</a>
-          </li>
-        
-          <li>
-            <a href="/2015/10/02/Protocol-Extensions/">Protocol Extensions</a>
           </li>
         
       </ul>
