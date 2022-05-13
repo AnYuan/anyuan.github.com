@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2013/5 | Anyuan&#39;s blog</title>
+  <title>Anyuan&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="记录点滴">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Anyuan's blog">
-<meta property="og:url" content="http://yoursite.com/archives/2013/05/index.html">
+<meta property="og:url" content="http://yoursite.com/page/5/index.html">
 <meta property="og:site_name" content="Anyuan's blog">
 <meta property="og:description" content="记录点滴">
 <meta name="twitter:card" content="summary">
@@ -61,55 +61,51 @@
       <div class="outer">
         <section id="main">
   
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2013" class="archive-year">2013</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2013/05/27/iOS-View-Controller-Lifecycle/" class="archive-article-date">
-  <time datetime="2013-05-27T15:31:52.000Z" itemprop="datePublished">5月 27</time>
+    <article id="post-phonegap-jquery-iOS画面跳转闪烁问题解决" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2012/05/29/phonegap-jquery-iOS画面跳转闪烁问题解决/" class="article-date">
+  <time datetime="2012-05-29T13:50:42.000Z" itemprop="datePublished">2012-05-29</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2013/05/27/iOS-View-Controller-Lifecycle/">iOS View Controller Lifecycle</a>
+      <a class="article-title" href="/2012/05/29/phonegap-jquery-iOS画面跳转闪烁问题解决/">phonegap+jquery iOS画面跳转闪烁问题解决</a>
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2013/05/21/emacs-and-vim-配置文件/" class="archive-article-date">
-  <time datetime="2013-05-21T06:37:52.000Z" itemprop="datePublished">5月 21</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2013/05/21/emacs-and-vim-配置文件/">emacs and vim 配置文件</a>
-    </h1>
-  
+        <p>在html所用到的css加入如下：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">.ui-mobile, .ui-mobile .ui-page, .ui-mobile [data-role=<span class="string">"page"</span>],</span><br><span class="line">.ui-mobile [data-role=<span class="string">"dialog"</span>], .ui-page, .ui-mobile .ui-page-active &#123;</span><br><span class="line">overflow: hidden;</span><br><span class="line">-webkit-backface-visibility: hidden;</span><br><span class="line">&#125;</span><br><span class="line">.ui-header &#123;</span><br><span class="line">position: fixed;</span><br><span class="line">z-index:<span class="number">10</span>;</span><br><span class="line">top:<span class="number">0</span>;</span><br><span class="line">width:<span class="number">100</span>%;</span><br><span class="line">padding:<span class="number">0</span> <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line">.ui-content &#123;</span><br><span class="line">padding-top: <span class="number">57</span>px;</span><br><span class="line">padding-bottom: <span class="number">54</span>px;</span><br><span class="line">overflow: auto;</span><br><span class="line">position: absolute;</span><br><span class="line">top: <span class="number">0</span>;</span><br><span class="line">right: <span class="number">0</span>;</span><br><span class="line">bottom: <span class="number">0</span>;</span><br><span class="line">left: <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line">.ui-footer &#123;</span><br><span class="line">position: fixed;</span><br><span class="line">z-index:<span class="number">10</span>;</span><br><span class="line">bottom:<span class="number">0</span>;</span><br><span class="line">width:<span class="number">100</span>%;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>并将header footer 的 data-position=”fixed”去掉</p>
 
-    </header>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2012/05/29/phonegap-jquery-iOS画面跳转闪烁问题解决/" data-id="cl34e5n5g000fotozqbzuu582" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/phonegap/">phonegap</a></li></ul>
+
+    </footer>
   </div>
+  
 </article>
+
+
   
   
-    </div></section>
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/page/4/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="page-number current">5</span>
+    </nav>
   
 </section>
         
