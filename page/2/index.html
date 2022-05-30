@@ -61,6 +61,50 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-NSAutoreleasePool-实现原理" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/12/10/NSAutoreleasePool-实现原理/" class="article-date">
+  <time datetime="2014-12-10T08:16:30.000Z" itemprop="datePublished">2014-12-10</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/12/10/NSAutoreleasePool-实现原理/">NSAutoreleasePool 实现原理</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="概述">概述</h3><p>autorelease 是NSObject的一个类方法，它是通过调用<code>[NSAutoreleasePool addObject:self]</code> 来把一个对象添加到自动释放池中的，因为这是一个类方法，所以有必要知道是对哪个对象进行autorelease调用。</p>
+<p>NSAutoreleasePool 实例是保存在每一个线程的stack中。当一个新pool创建，它就会进栈。当一个stack被销毁的时候，它就出栈。 使用NSAutoreleasePool类方法时，需要从当前线程中获取stack最上面的pool对象，来获取当前pool。</p>
+<p>当找到正确的pool后，调用addObject: 实例方法来将对象添加到pool中。当对象被添加到pool中，其实他是添加到pool中的一个可变数组中去。</p>
+<p>当pool被销毁时，pool会遍历可变数组中的所有对象，并发送 release 方法给每一个对象。还有一点额外说明，如果一个pool被销毁，并且这个pool不是stack最上端的，这个pool还会销毁该pool之上的所有pool。</p>
+<h3 id="总结">总结</h3><p>没有方法知道一个对象是否已经被自动释放了。<br>如果对象被autorelease 两次，这个对象就会被两次添加到pool中，当pool被销毁，该对象就会被release两次。<br>自动释放池的对象是当当前自动释放池被释放时被释放。pool是当它的代码显性的销毁它时而被销毁。<br>如果在一个线程上autorelease一个对象，并将它传给另一个线程，不会有特殊处理。当第一个线程池被销毁的时候，该对象也会被release， 不管该对象在新线程发生了什么。如果你需要继续保留这个对象，就需要在传递之前retain这个对象。</p>
+<p>原文链接：<a href="http://www.mikeash.com/pyblog/friday-qa-2911-09-02-lets-build-nsautoreleasepool.html" target="_blank" rel="external">http://www.mikeash.com/pyblog/friday-qa-2911-09-02-lets-build-nsautoreleasepool.html</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl3sosyse002at0z605vd2ri9" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Best-Practices-for-Handling-Multitouch-Events" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" class="article-date">
@@ -113,7 +157,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl34e5n450000otozyp0w6a27" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl3sosypx0000t0z6abdb1dpo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -171,7 +215,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl34e5n5n000rotozxvr88csu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl3sosyrf000rt0z68yzuybhv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -257,7 +301,7 @@ sudo pip <span class="keyword">install</span> MySQL_python
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/23/Linux-Web-py网站迁移Mac-OS-X/" data-id="cl34e5n6g002dotozetn570xj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/23/Linux-Web-py网站迁移Mac-OS-X/" data-id="cl3sosysg002et0z6hqhur0pa" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -338,7 +382,7 @@ sudo pip <span class="keyword">install</span> MySQL_python
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/17/Linux-服务器高I-O-等待延迟问题查找/" data-id="cl34e5n6g002botozfh6chnnw" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/17/Linux-服务器高I-O-等待延迟问题查找/" data-id="cl3sosysf002ct0z6mnye2b19" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -515,7 +559,7 @@ dispatch_async(<span class="built_in">queue</span>, ^{
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/19/iOS-GCD常用函数总结/" data-id="cl34e5n5x0015otoz9kj53jqy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/04/19/iOS-GCD常用函数总结/" data-id="cl3sosyrw0015t0z6rn90pa1n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -722,7 +766,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/06/iOS-Block实现探究/" data-id="cl34e5n60001botoz7hnsk3hb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/04/06/iOS-Block实现探究/" data-id="cl3sosyrz001bt0z68urufhnm" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -791,7 +835,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/03/05/UIApplicationDelegate-启动选项介绍/" data-id="cl34e5n66001ootozuviqqcbl" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/03/05/UIApplicationDelegate-启动选项介绍/" data-id="cl3sosys4001ot0z6gearuf2w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -849,7 +893,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/" data-id="cl34e5n5k000lotoz3ja2132j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/" data-id="cl3sosyrb000lt0z6s3909ur3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -898,68 +942,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/12/08/iOS-消息传递过程解析/" data-id="cl34e5n5m000potoz2su2i0er" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS-KVO实现方式" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/11/27/iOS-KVO实现方式/" class="article-date">
-  <time datetime="2013-11-27T09:13:57.000Z" itemprop="datePublished">2013-11-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/11/27/iOS-KVO实现方式/">iOS KVO实现方式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>KVO 也许是iOS中“最神奇”的部分了，因为你不需要在被观察对象中添加任何代码，就可以实现对被观察对象属性改变的通知。KVO究竟是怎么实现的？</p>
-<p>KVO是通过Objective－C的runtime来实现的。当你第一次要对一个对象进行观察时，runtime会为你创建一个被观察对象class的subclass。在这个新创建的subclass中，KVO会复写所要观察属性的setter方法，然后转换被观察对象的isa指针，指向新创建的subclass，所以，你想要观察的对象，变成了KVO在runtime时创建的subclass。因为Apple不想让这种机制暴露，所以还会复写要观察对象的class方法，所以，当你调用class来判断该对象的class时，还会显示原对象的class类型，而不是subclass的类型。</p>
-<p>继续探究</p>
-<pre><code class="Objective-C">// gcc -o kvoexplorer -framework Foundation kvoexplorer.m&#10;&#10;#import &#60;Foundation/Foundation.h&#62;&#10;#import &#60;objc/runtime.h&#62;&#10;&#10;&#10;@interface TestClass : NSObject&#10;{&#10;    int x;&#10;    int y;&#10;    int z;&#10;}&#10;@property int x;&#10;@property int y;&#10;@property int z;&#10;@end&#10;@implementation TestClass&#10;@synthesize x, y, z;&#10;@end&#10;&#10;static NSArray *ClassMethodNames(Class c)&#10;{&#10;    NSMutableArray *array = [NSMutableArray array];&#10;&#10;    unsigned int methodCount = 0;&#10;    Method *methodList = class_copyMethodList(c, &#38;methodCount);&#10;    unsigned int i;&#10;    for(i = 0; i &#60; methodCount; i++)&#10;        [array addObject: NSStringFromSelector(method_getName(methodList[i]))];&#10;    free(methodList);&#10;&#10;    return array;&#10;}&#10;&#10;static void PrintDescription(NSString *name, id obj)&#10;{&#10;    NSString *str = [NSString stringWithFormat:&#10;        @&#34;%@: %@\n\tNSObject class %s\n\tlibobjc class %s\n\timplements methods &#60;%@&#62;&#34;,&#10;        name,&#10;        obj,&#10;        class_getName([obj class]),&#10;        class_getName(obj-&#62;isa),&#10;        [ClassMethodNames(obj-&#62;isa) componentsJoinedByString:@&#34;, &#34;]];&#10;    printf(&#34;%s\n&#34;, [str UTF8String]);&#10;}&#10;&#10;int main(int argc, char **argv)&#10;{&#10;    [NSAutoreleasePool new];&#10;&#10;    TestClass *x = [[TestClass alloc] init];&#10;    TestClass *y = [[TestClass alloc] init];&#10;    TestClass *xy = [[TestClass alloc] init];&#10;    TestClass *control = [[TestClass alloc] init];&#10;&#10;    [x addObserver:x forKeyPath:@&#34;x&#34; options:0 context:NULL];&#10;    [xy addObserver:xy forKeyPath:@&#34;x&#34; options:0 context:NULL];&#10;    [y addObserver:y forKeyPath:@&#34;y&#34; options:0 context:NULL];&#10;    [xy addObserver:xy forKeyPath:@&#34;y&#34; options:0 context:NULL];&#10;&#10;    PrintDescription(@&#34;control&#34;, control);&#10;    PrintDescription(@&#34;x&#34;, x);&#10;    PrintDescription(@&#34;y&#34;, y);&#10;    PrintDescription(@&#34;xy&#34;, xy);&#10;&#10;    printf(&#34;Using NSObject methods, normal setX: is %p, overridden setX: is %p\n&#34;,&#10;          [control methodForSelector:@selector(setX:)],&#10;          [x methodForSelector:@selector(setX:)]);&#10;    printf(&#34;Using libobjc functions, normal setX: is %p, overridden setX: is %p\n&#34;,&#10;          method_getImplementation(class_getInstanceMethod(object_getClass(control),&#10;                                   @selector(setX:))),&#10;          method_getImplementation(class_getInstanceMethod(object_getClass(x),&#10;                                   @selector(setX:))));&#10;&#10;    return 0;&#10;}
-</code></pre>
-<p>首先，定义一个TestClass，有3个属性。<br>然后定义一些工具函数。ClassMethodNames 通过Objective－C 的runtime函数，来返回当前class实现的方法名。</p>
-<p>代码执行结果</p>
-<pre><code><span class="attribute">control</span>: <span class="string">&lt;TestClass: 0x104b20&gt; NSObject class TestClass libobjc class TestClass implements methods &lt;setX:, x, setY:, y, setZ:, z&gt;</span>
-
-<span class="oxygene">
-x: &lt;TestClass: <span class="number">0</span>x103280&gt; NSObject <span class="keyword">class</span> TestClass libobjc <span class="keyword">class</span> NSKVONotifying_TestClass <span class="keyword">implements</span> methods &lt;setY:, setX:, <span class="keyword">class</span>, dealloc, _isKVOA&gt;
-
-y: &lt;TestClass: <span class="number">0</span>x104b00&gt; NSObject <span class="keyword">class</span> TestClass libobjc <span class="keyword">class</span> NSKVONotifying_TestClass <span class="keyword">implements</span> methods &lt;setY:, setX:, <span class="keyword">class</span>, dealloc, _isKVOA&gt;
-
-xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class="keyword">class</span> TestClass libobjc <span class="keyword">class</span> NSKVONotifying_TestClass <span class="keyword">implements</span> methods &lt;setY:, setX:, <span class="keyword">class</span>, dealloc, _isKVOA&gt;
-
-<span class="keyword">Using</span> NSObject methods, normal setX: <span class="keyword">is</span> <span class="number">0</span>x195e, overridden setX: <span class="keyword">is</span> <span class="number">0</span>x195e
-
-<span class="keyword">Using</span> libobjc functions, normal setX: <span class="keyword">is</span> <span class="number">0</span>x195e, overridden setX: <span class="keyword">is</span> <span class="number">0</span>x96a1a550</span>
-</code></pre><p>可以看出，<br>0)TestClass 在runtime时变成了NSKVONotifying_TestClass</p>
-<p>1)虽然x，y只观察了一个属性，但是NSKVONotifying_TestClass却实现了setY, setX方法。也就是说，一个类，KVO只会subclass一个KVO类，也就是NSKVONotifying_TestClass类。</p>
-<p>2)NSKVONotifying_TestClass 覆写了class方法，来掩盖subclass的存在，还覆写了dealloc方法。除此之外，还有一个新的方法_isKVOA, 是Apple提供的一个私有方法，用于判断一个object是否生成动态subclass。</p>
-<p>原文链接：<a href="http://www.mikeash.com/pyblog/friday-qa-2009-01-23.html" target="_blank" rel="external">http://www.mikeash.com/pyblog/friday-qa-2009-01-23.html</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/27/iOS-KVO实现方式/" data-id="cl34e5n5v0011otozkpwa7bft" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/12/08/iOS-消息传递过程解析/" data-id="cl3sosyre000pt0z6wx8iss99" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -986,7 +969,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -995,7 +978,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/C/" style="font-size: 16.67px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/swift-source-code/" style="font-size: 13.33px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+      <a href="/tags/C/" style="font-size: 16.67px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 10px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/swift-source-code/" style="font-size: 13.33px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
     </div>
   </div>
 
@@ -1004,7 +987,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1014,6 +997,10 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/05/30/Combine-Introduction/">Combine: Introduction</a>
+          </li>
         
           <li>
             <a href="/2022/05/13/Swift-Source-Code-ContiguousArray/">Swift Source Code: ContiguousArray</a>
@@ -1029,10 +1016,6 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
         
           <li>
             <a href="/2021/03/29/Reading-Note-of-Book-Deep-Work/">Reading Note of Book: Deep Work</a>
-          </li>
-        
-          <li>
-            <a href="/2021/01/31/又开始写博客了/">又开始写博客了</a>
           </li>
         
       </ul>
