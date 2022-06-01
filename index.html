@@ -127,11 +127,20 @@
 </li>
 <li><p>Subjects</p>
 <ul>
+<li>Behave like both Publisher and Subscriber</li>
+<li><p>Broadcast values to multiple subscribers</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Subject</span>: <span class="title">Publisher</span>, <span class="title">AnyObject</span> </span>&#123;</span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">send</span><span class="params">(<span class="number">_</span> value: Output)</span></span></span><br><span class="line">    <span class="func"><span class="keyword">func</span> <span class="title">send</span><span class="params">(completion: Subscribers.Completion&lt;Failure&gt;)</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Kinds of Subjects</p>
+<ul>
 <li>Passthrough</li>
 <li>CurrentValue</li>
 </ul>
 </li>
-<li>SwiftUI        </li>
+</ul>
+</li>
+<li><p>SwiftUI        </p>
+</li>
 </ul>
 </li>
 </ul>
