@@ -3,21 +3,17 @@
 <head>
   <meta charset="utf-8">
   
-  <title>iOS block 总结 | Anyuan&#39;s blog</title>
+  <title>Archives: 2022/6 | Anyuan&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Block objects are a C-based language feature that you can use in your C, Objective-C, and C++ code. Blocks make it easy to define a self-contained unit of work.
-One of the key advantages of blocks is">
-<meta property="og:type" content="article">
-<meta property="og:title" content="iOS block 总结">
-<meta property="og:url" content="http://yoursite.com/2013/10/18/iOS-block-总结/index.html">
+  <meta name="description" content="记录点滴">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Anyuan's blog">
+<meta property="og:url" content="http://yoursite.com/archives/2022/06/index.html">
 <meta property="og:site_name" content="Anyuan's blog">
-<meta property="og:description" content="Block objects are a C-based language feature that you can use in your C, Objective-C, and C++ code. Blocks make it easy to define a self-contained unit of work.
-One of the key advantages of blocks is">
-<meta property="og:updated_time" content="2021-01-31T08:27:44.290Z">
+<meta property="og:description" content="记录点滴">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="iOS block 总结">
-<meta name="twitter:description" content="Block objects are a C-based language feature that you can use in your C, Objective-C, and C++ code. Blocks make it easy to define a self-contained unit of work.
-One of the key advantages of blocks is">
+<meta name="twitter:title" content="Anyuan's blog">
+<meta name="twitter:description" content="记录点滴">
   
     <link rel="alternative" href="/atom.xml" title="Anyuan&#39;s blog" type="application/atom+xml">
   
@@ -63,85 +59,39 @@ One of the key advantages of blocks is">
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-iOS-block-总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/10/18/iOS-block-总结/" class="article-date">
-  <time datetime="2013-10-18T08:20:28.000Z" itemprop="datePublished">2013-10-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+        <section id="main">
   
-    <h1 class="article-title" itemprop="name">
-      iOS block 总结
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2022" class="archive-year">2022</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      <a href="/2022/06/04/Combine-Publisher/" class="archive-article-date">
+  <time datetime="2022-06-04T06:10:13.000Z" itemprop="datePublished">6月 4</time>
+</a>
+      
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2022/06/04/Combine-Publisher/">Combine: Publisher</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Block objects are a C-based language feature that you can use in your C, Objective-C, and C++ code. Blocks make it easy to define a self-contained unit of work.</p>
-<p>One of the key advantages of blocks is their ability to use variables from outside their own lexical scope. When you define a block inside a function or method, the block acts as a traditional code block would in some ways. For example, a block can read the values of variables defined in the parent scope. Variables accessed by the block are copied to the block data structure on the heap so that the block acan access them later. When blocks are added to a dispatch queue, these values must typically be left in a read-only format. However, blocks that are executed synchronously can also use variables that have the __block keyword prepended to return data back to the parent’s calling scope.</p>
-<p>You declare blocks inline with your code using a syntax that is similar to the syntax used for function pointers. The main difference between a block and a fuction pointer is that the block name is preceded with a caret (^) instead of an asterisk (*). Like a function pointer, you can pass arguments to a block and receive a return value from it.</p>
-<pre><code><span class="keyword">int</span> x = <span class="number">123</span>;
-<span class="keyword">int</span> y = <span class="number">456</span>;
-
-<span class="comment">// Block declaration and assignment</span>
-<span class="keyword">void</span> (^aBlock)(<span class="keyword">int</span>) = ^(<span class="keyword">int</span> z)
-{
-  <span class="built_in">printf</span>(<span class="string">"%d %d %d\n"</span>, x, y, z);
-};
-
-<span class="comment">// Execute the block</span>
-aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456 789</span>
-</code></pre><p>The following is a summary of some of the key guidelines you should consider when designing your blocks:</p>
-<ul>
-<li>For blocks that you plan to perform asynchronously using a dispatch queue, it is safe to capture scalar variables from the parent function or method and use them in the block. However, you should not try to capture large structures or other pointer-based variables that are allocated and deleted by the calling context. By the time your block is executed, the memory referenced by that pointer may be gone. Of course, it is safe to allocate memory yourself and explicitly hand off ownership of that memory to the block.</li>
-<li>Dispatch queues copy blocks that  are added to them, and they release blocks when they finish executing. In other words, you do not need to explicitly copy blocks before adding them to a queue.</li>
-<li>Although queues are more efficient than raw threads at executing small tasks, there is still overhead to creating blocks and executing them on a queue. If a block does too little work, it may be cheaper to execute it inline than dispatch it to a queue. The way to tell if a block is doing too little work is to gather metrics for each path using the performance tools and compare them.</li>
-<li>Do not cache data relative to the underlying thread and expect that data to be accessible from a different block. If tasks in the same queue need to share data, use the context  pointer of the dispatch queue to store the data instead.</li>
-<li>If your block creates more than a few Objective-C objects. you might want to enclose parts of your block’s code in an @autorelease block to handle the memory management for those objects. Although GCD dispatch queues have their own autorelease pools, they make no guarantees as to when those pools are drained. If your application is memory constrained, creating your own autorelease pool allows you to free up the memory for autoreleased objects at more regular intervals.</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/10/18/iOS-block-总结/" data-id="cl3zju8k1000v5moz9tkkdmhu" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
+    </header>
   </div>
-  
-    
-<nav id="article-nav">
-  
-    <a href="/2013/10/29/iOS-KVO-Key-Value-Observing-总结/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          iOS KVO(Key-Value Observing)总结
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2013/08/08/Floating-Point-in-C-CS-APP/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Floating Point in C --- CS:APP</div>
-    </a>
-  
-</nav>
-
-  
 </article>
-
+  
+  
+    </div></section>
+  
 </section>
         
           <aside id="sidebar">

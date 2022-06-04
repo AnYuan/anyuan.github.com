@@ -61,6 +61,116 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-Pointers-and-Arrays-the-C-programming-language" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2013/07/21/Pointers-and-Arrays-the-C-programming-language/" class="article-date">
+  <time datetime="2013-07-21T08:03:51.000Z" itemprop="datePublished">2013-07-21</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2013/07/21/Pointers-and-Arrays-the-C-programming-language/">Pointers and Arrays --- the C programming language</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>In ANSI C, generic pointer is void *;</p>
+<p>The unary operator &amp; gives the address of an object, so the statement p = &c; assigns the address of c to the variable p, and p is said to “point to” c. The &amp; operator <strong>only</strong> applies to objects in memory: <strong>variables and arrays element</strong>. It cannot be applied to expressions, constants, or register variables.</p>
+<p>The unary operator * is the indirection  or dereferencing operator; when applied to a pointer, it accesses the object the pointer points to.</p>
+<pre><code><span class="keyword">int</span> x = <span class="number">1</span>, y = <span class="number">2</span>, z[<span class="number">10</span>];
+
+<span class="keyword">int</span> *ip; <span class="comment">/* ip is a pointer to int */</span>
+
+ip = &amp;x; <span class="comment">/*ip now points to x */</span>
+
+y = *ip; <span class="comment">/*y is now 1 */</span>
+
+*ip = <span class="number">0</span>; <span class="comment">/* x is now 0*/</span>
+
+ip = &amp;z[<span class="number">0</span>]; <span class="comment">/* ip now points to z[0] */</span>
+</code></pre><p>You should also not the implication that a pointer is constrained to point to a particular kind of object: every pointer points to a specific data type. (There is one exception: a “pointer to void” is used to hold any type of pointer but cannot be dereferenced iteself.)</p>
+<p>If ip points to the integer x, then *ip can occur in any context where x could, so</p>
+<pre><code>*<span class="literal">ip</span> = *<span class="literal">ip</span> + <span class="number">10</span><span class="comment">;</span>
+</code></pre><p>increments *ip by 10.</p>
+<p>The unary operators * and &amp; bind more tightly than arithmetic operators, so the assignment</p>
+<pre><code>y = *<span class="literal">ip</span> + <span class="number">1</span>
+</code></pre><p>takes whatever ip points at, adds 1, and assigns the result to y , while</p>
+<pre><code>*<span class="literal">ip</span> += <span class="number">1</span>
+</code></pre><p>incrments what ip points to, as do</p>
+<pre><code>++*<span class="literal">ip</span>
+</code></pre><p>and <strong>(*ip)++</strong></p>
+<p>The parentheses are necessary in this last example; without them, the expression would increment ip instead of what it points to , beacuse unary operators like * and ++ associate right to left.</p>
+<p>Finally, since pointers are variables, they can be used without dereferencing. For example, if iq is another pointer to int, iq = ip</p>
+<p>copies the contents of ip into iq, thus making iq point to whatever ip point to whatever ip pointed to.</p>
+<p><strong>Pointers and Arrays</strong></p>
+<p>Any operation that can be achieved by array subscripting can also be done with pointers. The pointer version will in general be faster but, at least to the uninitiated, somewhat harder to understand.</p>
+<p>If pa points to a particular element of an arrya, then by definition pa+1 points to the next element, pa+i points i elements after pa, and pa-i points i elements before. Thus, if pa points to a[0],</p>
+<p>*(pa + 1)</p>
+<p>refers to the contents of a[1], pa+i is the address of a[i], and *(pa+i) is the contents of a[i].</p>
+<p>The correspondence between indexing and pointer arithmetic is very close. By definition, the value of a variable or expression of type array is the address of element zero of the array. Thus after the assignment pa = &amp;a[0]; pa and a have identical values. Since the name of an array is a synonym for the location of the initial element, the assignment pa = &amp;a[0] can also be written as pa = a;</p>
+<p>In short, an array-and-index expression is equivalent to one written as a pointer and offset.</p>
+<p><strong>There is one difference between an array name and a pointer that must be kept in mind. A pointer is a variable, so pa=a and pa++ are legal. But array name is not a variable;constructions like a=pa and a++ are illegal.</strong></p>
+<p>When an array name is passed to a function, what is passed is the location of the initial element. Within the called function, this argument is a local variable, and so an array name parameter is a pointer, that is, a variable containing an address.</p>
+<p><strong>Address Arithmetic</strong></p>
+<p>Pointer arithmetic is consistent: if we had been dealing with floats, which occupy more storage than chars, and if p were a pointer to float, p++ would advance to the next float. Thus we could write another version of alloc that maintains floats instead of chars, merely by changing char to float throughout alloc and afree. All the pointer manipulations automatically take into account the size of the object pointed to.</p>
+<p>The valid pointer operations are assignment of pointers of the same type, adding or subtracting a pointer and an integer, subtracting or comparing two pointers to members of the same array, and assigning or comparing to zero. All other pointer arithmetic is illegal. It is not legal to add two pointers, or to multiply or divide or shift or mask them, or to add float or double to them, or even, except for void *, to assign a pointer of one type to a pointer of another type without a cast.</p>
+<p><strong>Pointer Arrays</strong></p>
+<p>initialization of pointer arrays:</p>
+<p>The syntax is similar to previous initializations:</p>
+<pre><code><span class="comment">/* month_name: return name of n-th month */</span>
+
+<span class="function"><span class="keyword">char</span> *<span class="title">month_name</span><span class="params">(<span class="keyword">int</span> n)</span>
+
+</span>{
+
+<span class="keyword">static</span> <span class="keyword">char</span> *name[] = {
+
+    <span class="string">"Illegal month"</span>,
+
+    <span class="string">"January"</span>, <span class="string">"February"</span>, <span class="string">"March"</span>,
+
+    <span class="string">"April"</span>, <span class="string">"May"</span>, <span class="string">"June"</span>,
+
+    <span class="string">"July"</span>, <span class="string">"August"</span>, <span class="string">"September"</span>,
+
+    <span class="string">"October"</span>, <span class="string">"November"</span>, <span class="string">"December"</span>
+
+};
+
+<span class="keyword">return</span> (n &lt; <span class="number">1</span> || n &gt; <span class="number">12</span>) ? name[<span class="number">0</span>] : name[n];
+
+}
+</code></pre><p><strong>Pointers vs. Multi-dimensional Arrays</strong></p>
+<p>Newcomers to C are sometimes confused about the difference between a two-dimensional array and an array of pointers, such as name in the example above. Given the definitions</p>
+<pre><code>int a[<span class="link_label">10</span>][<span class="link_reference">20</span>];
+
+int *b[10];
+</code></pre><p>then <code>a[3][4]</code> and <code>b[3][4]</code> are both syntactically legal references to a single int. But a is a true two-dimensional array: 200 int-sized locations have been set aside, and the conventional rectangular subscript calculation 20xrow+col is used to find the element <code>a[row][col]</code>. For b, however, the definition only allocates 10 pointers and does not initialize them; initialization must be done explicitly, either statically or with code. Assuming that each element of b does point to a twenty-element array, then there will be 200 ints set aside, plus ten cells for the pointers. The important advantage of the pointer array is that the rows of the array may be of different lengths. That is, each element of b need not point ot a twenty-element vector; some may point to two elements, some to fifty, and some to none at all.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2013/07/21/Pointers-and-Arrays-the-C-programming-language/" data-id="cl3zju8mv00265moz7o6cy772" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-C-initialization-the-C-programming-language" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2013/07/20/C-initialization-the-C-programming-language/" class="article-date">
@@ -106,7 +216,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/07/20/C-initialization-the-C-programming-language/" data-id="cl3sosysl002ot0z6wuiigfko" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/07/20/C-initialization-the-C-programming-language/" data-id="cl3zju8o0002q5mozn0slykol" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li></ul>
@@ -149,7 +259,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/07/19/Debugging-the-practice-of-programming/" data-id="cl3sosysh002it0z6l3201pg0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/07/19/Debugging-the-practice-of-programming/" data-id="cl3zju8ne002i5moz55m1fcjj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/programming/">programming</a></li></ul>
@@ -193,7 +303,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/06/03/iOS-中文英文字符集/" data-id="cl3sosyrg000tt0z6y3u6as7z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/06/03/iOS-中文英文字符集/" data-id="cl3zju8jc000t5moz1wp3glbv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -268,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/05/27/iOS-View-Controller-Lifecycle/" data-id="cl3sosyrk000xt0z6y1n5t00z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/05/27/iOS-View-Controller-Lifecycle/" data-id="cl3zju8kh000x5moz3epdpc6i" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -308,7 +418,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/05/21/emacs-and-vim-配置文件/" data-id="cl3sosys1001ft0z6apo3wrgo" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/05/21/emacs-and-vim-配置文件/" data-id="cl3zju8lr001f5mozj04spwnb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a></li></ul>
@@ -350,7 +460,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/03/12/NSInvocation简单用法/" data-id="cl3sosysd0028t0z686tqtrzt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/03/12/NSInvocation简单用法/" data-id="cl3zju8my00285mozxp01y6n3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -392,7 +502,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/03/10/链表判断是否有环与判断环入口/" data-id="cl3sosyq40003t0z6r1le9lv9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/03/10/链表判断是否有环与判断环入口/" data-id="cl3zju8d600035moz53mnlhgh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/算法/">算法</a></li></ul>
@@ -431,7 +541,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/01/18/iOS产生随机字符串/" data-id="cl3sosyra000jt0z6vgsiqb3k" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/01/18/iOS产生随机字符串/" data-id="cl3zju8hz000j5mozdpf346zg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -484,99 +594,10 @@ makepkg
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2012/12/29/用pacman-从archlinux-中获取程序源代码/" data-id="cl3sosyq70006t0z6kl0z399j" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2012/12/29/用pacman-从archlinux-中获取程序源代码/" data-id="cl3zju8dh00065mozfh0bovj4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Unix-philosophy-取自The-art-of-unix-programming" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2012/12/29/Unix-philosophy-取自The-art-of-unix-programming/" class="article-date">
-  <time datetime="2012-12-29T01:34:00.000Z" itemprop="datePublished">2012-12-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2012/12/29/Unix-philosophy-取自The-art-of-unix-programming/">Unix philosophy ---取自The art of unix programming</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>Rule of Modularity: Write simple parts connected by clean interfaces.</li>
-</ol>
-<ol>
-<li>Rule of Clarity: Clarity is better than cleverness.</li>
-</ol>
-<ol>
-<li>Rule of Composition: Design programs to be connected to other programs.</li>
-</ol>
-<ol>
-<li>Rule of Separation: Separate policy from mechanism; separate interfaces from engines.</li>
-</ol>
-<ol>
-<li>Rule of Simplicity: Design for simplicity; add complexity only where you must.</li>
-</ol>
-<ol>
-<li>Rule of Parsimony: Write a big program only when it is clear by demonstration that nothing<br>else will do.</li>
-</ol>
-<ol>
-<li>Rule of Transparency: Design for visibility to make inspection and debugging easier.</li>
-</ol>
-<ol>
-<li>Rule of Robustness: Robustness is the child of transparency and simplicity.</li>
-</ol>
-<ol>
-<li>Rule of Representation: Fold knowledge into data so program logic can be stupid and robust.</li>
-</ol>
-<ol>
-<li>Rule of Least Surprise: In interface design, always do the least surprising thing.</li>
-</ol>
-<ol>
-<li>Rule of Silence: When a program has nothing surprising to say, it should say nothing.</li>
-</ol>
-<ol>
-<li>Rule of Repair: When you must fail, fail noisily and as soon as possible.</li>
-</ol>
-<ol>
-<li>Rule of Economy: Programmer time is expensive; conserve it in preference to machine time.</li>
-</ol>
-<ol>
-<li>Rule of Generation: Avoid hand-hacking; write programs to write programs when you can.</li>
-</ol>
-<ol>
-<li>Rule of Optimization: Prototype before polishing. Get it working before you optimize it.</li>
-</ol>
-<ol>
-<li>Rule of Diversity: Distrust all claims for “one true way”.</li>
-</ol>
-<ol>
-<li>Rule of Extensibility: Design for the future, because it will be here sooner than you think.</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2012/12/29/Unix-philosophy-取自The-art-of-unix-programming/" data-id="cl3sosys4001lt0z6zsnu103o" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Unix/">Unix</a></li></ul>
 
     </footer>
   </div>
@@ -600,7 +621,7 @@ makepkg
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -609,7 +630,7 @@ makepkg
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/C/" style="font-size: 16.67px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 10px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 13.33px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/swift-source-code/" style="font-size: 13.33px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
     </div>
   </div>
 
@@ -618,7 +639,7 @@ makepkg
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -628,6 +649,10 @@ makepkg
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/06/04/Combine-Publisher/">Combine: Publisher</a>
+          </li>
         
           <li>
             <a href="/2022/05/30/Combine-Introduction/">Combine: Introduction</a>
@@ -643,10 +668,6 @@ makepkg
         
           <li>
             <a href="/2022/05/04/Swift-Source-Code-Sequence/">Swift Source Code: Sequence</a>
-          </li>
-        
-          <li>
-            <a href="/2021/03/29/Reading-Note-of-Book-Deep-Work/">Reading Note of Book: Deep Work</a>
           </li>
         
       </ul>
