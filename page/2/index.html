@@ -61,6 +61,110 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-iOS-7-9-新特性总结" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/09/13/iOS-7-9-新特性总结/" class="article-date">
+  <time datetime="2015-09-13T08:29:53.000Z" itemprop="datePublished">2015-09-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/09/13/iOS-7-9-新特性总结/">iOS 7 - 9 新特性总结</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="iOS_7">iOS 7</h3><ol>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/StringsTextFonts/Conceptual/TextAndWebiPhoneOS/Introduction/Introduction.html#//apple_ref/doc/uid/TP40009542" target="_blank" rel="external">Text Kit</a></p>
+<p> 文字排版相关</p>
+</li>
+</ol>
+<ol>
+<li>多任务<ul>
+<li>设置<code>UIBackgroundModes</code>为<code>fetch</code>来进行定期后台下载。</li>
+<li>设置<code>UIBackgroundModes</code>为<code>remote-notification</code>, 用远程推送的方式，来让应用在后台进行下载内容。</li>
+</ul>
+</li>
+</ol>
+<ol>
+<li>NSURLSession 用来替代NSURLConnection，配合多任务后台下载使用。</li>
+<li><p>AirDrop<br> 附近设备分享传输文件，不需要网络。</p>
+</li>
+<li><p>新Framework:</p>
+<ul>
+<li>GameController.framework - 与游戏硬件通信</li>
+<li>SpriteKit.framework - 游戏图形渲染和动画</li>
+<li>Multipeer connectivity framework - 点对点网络</li>
+<li>JavaScriptCore.framework - JavaScript对象的oc封装</li>
+<li>MediaAccessibility.framework</li>
+<li>SafariServices.framework - 用程序添加URL到用户Safari的阅读列表等</li>
+</ul>
+</li>
+</ol>
+<h3 id="iOS_8">iOS 8</h3><ol>
+<li><p>Swift 1.0</p>
+</li>
+<li><p><a href="https://developer.apple.com/library/ios/documentation/General/Conceptual/ExtensibilityPG/index.html#//apple_ref/doc/uid/TP40014214" target="_blank" rel="external">App Extension</a></p>
+<ul>
+<li>Share， 在系统提供的分享选项中添加自己</li>
+<li>Action, 对于选中内容可以执行一个action</li>
+<li>Today， 通知中心的widget</li>
+<li>Photo editinig.</li>
+<li>Storage provider. 与其他应用共享文件存储位置</li>
+<li>自定义键盘</li>
+</ul>
+</li>
+<li><p><a href="https://developer.apple.com/library/ios/samplecode/KeychainTouchID/Introduction/Intro.html#//apple_ref/doc/uid/TP40014530" target="_blank" rel="external">Touch ID</a></p>
+</li>
+<li><p>Photos Framework</p>
+</li>
+<li>AV Audio Engine: Core Audio 更上层的封装。</li>
+<li>HealthKit Framework</li>
+<li>HomeKit Framework</li>
+<li><a href="https://developer.apple.com/library/ios/documentation/UserExperience/Conceptual/Handoff/HandoffFundamentals/HandoffFundamentals.html#//apple_ref/doc/uid/TP40014338" target="_blank" rel="external">Handoff</a></li>
+<li>Size class</li>
+<li>Metal - 替代OpenGL ES</li>
+</ol>
+<h3 id="iOS_9">iOS 9</h3><ol>
+<li>Swift 2.0: 错误处理，Availability, Protocol extensions等</li>
+<li>iPad 多任务</li>
+<li>watchOS2</li>
+<li>UI Test</li>
+<li>App Thinning</li>
+<li>Search API可以搜索App内容</li>
+<li>新系统字体San francisco</li>
+<li>Safari View Controller</li>
+<li>Contacts Framework</li>
+<li>3D Touch</li>
+<li>Live Photo</li>
+</ol>
+<p>参考资料：<br>1.<a href="https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS7.html" target="_blank" rel="external">https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS7.html</a></p>
+<p>2.<a href="https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW1" target="_blank" rel="external">https://developer.apple.com/library/ios/releasenotes/General/WhatsNewIniOS/Articles/iOS8.html#//apple_ref/doc/uid/TP40014205-SW1</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/09/13/iOS-7-9-新特性总结/" data-id="cl4cdptrz001gjsv947egptls" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-SQLite-WAL-调研总结" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/08/08/SQLite-WAL-调研总结/" class="article-date">
@@ -117,7 +221,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/08/SQLite-WAL-调研总结/" data-id="cl3zju8me001x5mozyobwkb6x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/08/SQLite-WAL-调研总结/" data-id="cl4cdptsb0020jsv9zu25jnh8" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQLite/">SQLite</a></li></ul>
@@ -161,7 +265,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl3zju8n1002a5moznwdc7smb" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl4cdptsl002djsv9doxtaqli" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -225,7 +329,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl3zju8cd00005mozgd42ph49" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl4cdptpq0000jsv9vvpujex7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -283,7 +387,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl3zju8iq000r5moz09b28ak9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl4cdptrk000ujsv96uesj5ae" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -369,7 +473,7 @@ sudo pip <span class="keyword">install</span> MySQL_python
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/23/Linux-Web-py网站迁移Mac-OS-X/" data-id="cl3zju8n7002e5mozf6q4c44z" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/23/Linux-Web-py网站迁移Mac-OS-X/" data-id="cl4cdptsq002hjsv9z13vc98y" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -450,7 +554,7 @@ sudo pip <span class="keyword">install</span> MySQL_python
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/17/Linux-服务器高I-O-等待延迟问题查找/" data-id="cl3zju8n4002c5moza8w2e576" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/17/Linux-服务器高I-O-等待延迟问题查找/" data-id="cl4cdptsm002fjsv9fmbak1z9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -627,7 +731,7 @@ dispatch_async(<span class="built_in">queue</span>, ^{
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/19/iOS-GCD常用函数总结/" data-id="cl3zju8l200155mozdb6l8jbe" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/04/19/iOS-GCD常用函数总结/" data-id="cl4cdptrw0018jsv9ft1xxnxp" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -834,7 +938,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/06/iOS-Block实现探究/" data-id="cl3zju8le001b5moz1wpagha3" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/04/06/iOS-Block实现探究/" data-id="cl4cdptry001ejsv96zot8q2n" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -903,65 +1007,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/03/05/UIApplicationDelegate-启动选项介绍/" data-id="cl3zju8m1001o5moz730qpvzq" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS7-nested-push-animation-can-result-in-corrupted" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/" class="article-date">
-  <time datetime="2014-02-19T06:17:53.000Z" itemprop="datePublished">2014-02-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/">iOS7 nested push animation can result in corrupted</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在iOS7中，开启push/pop view controller 动画遇到一个问题，就是在快速切换多次后会在console出现一个问题</p>
-<pre><code>nested push animation can <span class="literal">result</span> <span class="keyword">in</span> corrupted navigation bar multiple warning
-<span class="type">Unbalanced</span> calls to begin/<span class="keyword">end</span> appearance transitions <span class="keyword">for</span>
-</code></pre><p>查了一些资料后，找到了一个方法：</p>
-<p>0）找到push/pop view controller 动画结束的回调。</p>
-<p>UINavigationControllerDelegate代理中的</p>
-<pre><code><span class="pp">-<span class="params">(void)</span>navigationController:<span class="params">(<span class="variable">UINavigationController</span> *)</span>navigationController
-  didShowViewController:<span class="params">(<span class="variable">UIViewController</span> *)</span>viewController
-               animated:<span class="params">(<span class="variable">BOOL</span>)</span>animated</span>
-</code></pre><p>1）找到是否接受点击方法的方法。</p>
-<p>UIGestureRecognizerDelegate中的</p>
-<pre><code><span class="pp">-<span class="params">(<span class="variable">BOOL</span>)</span>gestureRecognizer:<span class="params">(<span class="variable">UIGestureRecognizer</span> *)</span>gestureRecognizer shouldReceiveTouch:<span class="params">(<span class="variable">UITouch</span> *)</span>touch</span>
-</code></pre><p>应用以上两个代理方法，加上一个BOOL的flag值，可以控制是否处罚pop/push</p>
-<p>当动画完成时，将flag设置为允许pop/push， <code>shouldReceiveTouch</code>直接返回flag值。</p>
-<p>在点击事件时，要注意更改flag值不再接受其他事件，防止在flag为YES时的多次点击。</p>
-<p>参考链接：</p>
-<p><a href="http://stackoverflow.com/questions/11813091/nested-push-animation-can-result-in-corrupted-navigation-bar-multiple-warning" target="_blank" rel="external">http://stackoverflow.com/questions/11813091/nested-push-animation-can-result-in-corrupted-navigation-bar-multiple-warning</a></p>
-<p><a href="http://www.taofengping.com/2013/12/26/ios7_barbuttonitem_navigation_gesture/" target="_blank" rel="external">http://www.taofengping.com/2013/12/26/ios7_barbuttonitem_navigation_gesture/</a></p>
-<p><a href="http://blog.csdn.net/lengshengren/article/details/12616217" target="_blank" rel="external">http://blog.csdn.net/lengshengren/article/details/12616217</a></p>
-<p><a href="http://stackoverflow.com/questions/10150231/how-to-detect-when-uinavigationcontroller-animation-has-finished" target="_blank" rel="external">http://stackoverflow.com/questions/10150231/how-to-detect-when-uinavigationcontroller-animation-has-finished</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/" data-id="cl3zju8i3000l5mozsd66ddi7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/03/05/UIApplicationDelegate-启动选项介绍/" data-id="cl4cdpts6001rjsv9iyucvjaf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -988,7 +1034,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -997,7 +1043,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/reading/" style="font-size: 10px;">reading</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
     </div>
   </div>
 
@@ -1006,7 +1052,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1016,6 +1062,10 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/06/13/信心/">信心</a>
+          </li>
         
           <li>
             <a href="/2022/06/04/Combine-Publisher/">Combine: Publisher</a>
@@ -1031,10 +1081,6 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
         
           <li>
             <a href="/2022/05/11/Swift-Source-Code-Collection/">Swift Source Code: Collection</a>
-          </li>
-        
-          <li>
-            <a href="/2022/05/04/Swift-Source-Code-Sequence/">Swift Source Code: Sequence</a>
           </li>
         
       </ul>
