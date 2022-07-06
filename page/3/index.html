@@ -61,6 +61,213 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-iOS-Block实现探究" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2014/04/06/iOS-Block实现探究/" class="article-date">
+  <time datetime="2014-04-06T08:22:21.000Z" itemprop="datePublished">2014-04-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/04/06/iOS-Block实现探究/">iOS Block实现探究</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>使用clang的rewrite-objc filename 可以将有block的c代码转换成cpp代码。从中可以看到block的实现。</p>
+<pre><code><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span>
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+  <span class="keyword">void</span> (^blk)(<span class="keyword">void</span>) = ^{
+    <span class="built_in">printf</span>(<span class="string">"Block\n"</span>);
+  };
+  blk();
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>使用clang rewrite-objc以后会看到block的实现</p>
+<pre><code><span class="keyword">struct</span> __main_block_impl_0 {
+ <span class="keyword">struct</span> __block_impl <span class="keyword">impl</span>;
+ <span class="keyword">struct</span> __main_block_desc_0* Desc;
+  __main_block_impl_0(void *fp, <span class="keyword">struct</span> __main_block_desc_0 *desc, <span class="keyword">int</span> flags=<span class="number">0</span>)
+{
+<span class="keyword">impl</span>.isa = &amp;_NSConcreteStackBlock;
+<span class="keyword">impl</span>.Flags = flags;
+<span class="keyword">impl</span>.FuncPtr = fp;
+Desc = desc;
+ }
+};
+</code></pre><p>可以看到其实block是一个正常的OC类</p>
+<p>来看看block是怎样访问外部变量的</p>
+<pre><code><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+  <span class="keyword">int</span> dmy = <span class="number">256</span>;
+  <span class="keyword">int</span> val = <span class="number">10</span>;
+  <span class="keyword">const</span> <span class="keyword">char</span> *fmt = <span class="string">"val = %d\n"</span>;
+  <span class="keyword">void</span> (^blk)(<span class="keyword">void</span>) = ^{
+    <span class="built_in">printf</span>(fmt, val);
+  };
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>转换之后，可以看到</p>
+<pre><code><span class="keyword">struct</span> __main_block_impl_0 {
+  <span class="keyword">struct</span> __block_impl impl;
+  <span class="keyword">struct</span> __main_block_desc_0* Desc;
+  <span class="keyword">const</span> <span class="keyword">char</span> *fmt;
+  <span class="keyword">int</span> val;
+  __main_block_impl_0(<span class="keyword">void</span> *fp, <span class="keyword">struct</span> __main_block_desc_0 *desc, <span class="keyword">const</span> <span class="keyword">char</span> *_fmt, <span class="keyword">int</span> _val, <span class="keyword">int</span> flags=<span class="number">0</span>) : fmt(_fmt), val(_val) {
+impl.isa = &amp;_NSConcreteStackBlock;
+impl.Flags = flags;
+impl.FuncPtr = fp;
+Desc = desc;
+  }
+};
+
+
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+  <span class="keyword">int</span> dmy = <span class="number">256</span>;
+  <span class="keyword">int</span> val = <span class="number">10</span>;
+  <span class="keyword">const</span> <span class="keyword">char</span> *fmt = <span class="string">"val = %d\n"</span>;
+  <span class="keyword">void</span> (*blk)(<span class="keyword">void</span>) = (<span class="keyword">void</span> (*)())&amp;__main_block_impl_0((<span class="keyword">void</span> *)__main_block_func_0, &amp;__main_block_desc_0_DATA, fmt, val);
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+</code></pre><p>block的变量会被复制进block中</p>
+<p>如果当block要改变传入的变量值怎么办？首先看一下全局变量和本地静态变量</p>
+<pre><code><span class="keyword">int</span> global_val = <span class="number">1</span>;
+<span class="keyword">static</span> <span class="keyword">int</span> static_global_val = <span class="number">2</span>;
+<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
+</span>{
+  <span class="keyword">static</span> <span class="keyword">int</span> static_val = <span class="number">3</span>;
+  <span class="keyword">void</span>(^blk)(<span class="keyword">void</span>) = ^{
+  global_val *= <span class="number">1</span>;
+   static_global_val *= <span class="number">2</span>;
+  static_val *= <span class="number">3</span>;
+  };
+  blk();
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+
+
+<span class="keyword">struct</span> __main_block_impl_0 {
+  <span class="keyword">struct</span> __block_impl impl;
+  <span class="keyword">struct</span> __main_block_desc_0* Desc;
+  <span class="keyword">int</span> *static_val;
+  __main_block_impl_0(<span class="keyword">void</span> *fp, <span class="keyword">struct</span> __main_block_desc_0 *desc, <span class="keyword">int</span> *_static_val, <span class="keyword">int</span> flags=<span class="number">0</span>) : static_val(_static_val) {
+impl.isa = &amp;_NSConcreteStackBlock;
+impl.Flags = flags;
+impl.FuncPtr = fp;
+Desc = desc;
+  }
+};
+<span class="keyword">static</span> <span class="keyword">void</span> __main_block_func_0(<span class="keyword">struct</span> __main_block_impl_0 *__cself) {
+  <span class="keyword">int</span> *static_val = __cself-&gt;static_val; <span class="comment">// bound by copy</span>
+
+global_val *= <span class="number">1</span>;
+static_global_val *= <span class="number">2</span>;
+(*static_val) *= <span class="number">3</span>;
+}
+</code></pre><p>由于全局变量是在Data Section中，所以直接可以访问。局部静态变量是通过将其指针传入到block中，block就可以对其值进行修改。</p>
+<p>然后看一下__block修饰符变量</p>
+<pre><code><span class="type">int</span> main()
+{
+  __block <span class="type">int</span> val = <span class="number">10</span>;
+  <span class="type">void</span> (^blk)(<span class="type">void</span>) = ^{val = <span class="number">1</span>;};
+  blk();
+  <span class="keyword">return</span> <span class="number">0</span>;
+}
+
+struct __main_block_impl_0 {
+  struct __block_impl impl;
+  struct __main_block_desc_0* <span class="type">Desc</span>;
+  __Block_byref_val_0 *val; // by <span class="keyword">ref</span>
+  __main_block_impl_0(<span class="type">void</span> *fp, struct __main_block_desc_0 *desc,             __Block_byref_val_0 *_val, <span class="type">int</span> flags=<span class="number">0</span>) : val(_val-&gt;__forwarding) {
+impl.isa = &amp;_NSConcreteStackBlock;
+impl.<span class="type">Flags</span> = flags;
+impl.<span class="type">FuncPtr</span> = fp;
+<span class="type">Desc</span> = desc;
+  }
+};
+<span class="keyword">static</span> <span class="type">void</span> __main_block_func_0(struct __main_block_impl_0 *__cself) {
+  __Block_byref_val_0 *val = __cself-&gt;val; // bound by <span class="keyword">ref</span>
+(val-&gt;__forwarding-&gt;val) = <span class="number">1</span>;}
+<span class="keyword">static</span> <span class="type">void</span> __main_block_copy_0(struct __main_block_impl_0*dst, struct __main_block_impl_0*src)
+</code></pre><p><strong>block修饰符的变量，会生成一个</strong>Block_byref_val_0的struct，然后通过访问其<strong>forwarding来访问val值。因为Block有可能是在stack或者heap中，所以用</strong>forwarding来访问。之所以会将__block单独生成一个struct是因为可能该变量会被多个block使用。</p>
+<p>Block分三种类型</p>
+<p>0) NSConcreteStackBlock    –stack</p>
+<p>1) NSConcreteGlobalBlock   –data area</p>
+<p>2) NSConcreteMallocBlock   –heap</p>
+<p>自动copy block</p>
+<p>当开启ARC时，在某些情况编译器会自动copy block，从stack到heap。</p>
+<pre><code><span class="keyword">typedef</span> <span class="keyword">int</span> （^<span class="keyword">blk_t</span>)(<span class="keyword">int</span>);
+<span class="keyword">blk_t</span> func(<span class="keyword">int</span> rate)
+{
+  <span class="keyword">return</span> ^(<span class="keyword">int</span> count){<span class="keyword">return</span> rate * count;};
+}
+
+
+<span class="keyword">blk_t</span> func(<span class="keyword">int</span> rate)
+{
+  <span class="keyword">blk_t</span> tmp = &amp;__func_block_impl_0(
+__func_block_func_0, &amp;__func_block_desc_0_DATA, rate);
+
+  tmp = objc_retainBlock(tmp);
+  <span class="keyword">return</span> objc_autoreleaseReturnValue(tmp);
+}
+</code></pre><p>有些情况，编译器是无法检测是否应该copy block：</p>
+<p>当block作为参数传递到方法或函数中。</p>
+<p>但是，如果该方法或函数在内部copy，就不用手动再copy：</p>
+<p>0）cocoa framework方法， 有usingBlock</p>
+<p>1) GCD API</p>
+<pre><code>- (<span class="keyword">id</span>) getBlockArray
+{
+  <span class="keyword">int</span> val = <span class="number">10</span>;
+  <span class="keyword">return</span> [[<span class="built_in">NSArray</span> alloc] initWithObjects:
+ [^{<span class="built_in">NSLog</span>(<span class="string">@"blk0:%d"</span>, val);} <span class="keyword">copy</span>],
+ [^{<span class="built_in">NSLog</span>(<span class="string">@"blk1:%d"</span>, val);} <span class="keyword">copy</span>], <span class="literal">nil</span>];
+}
+</code></pre><p>__forwarding</p>
+<p>当block从stack copy到 heap中时，block中用到的<strong>block也会copy到heap中，并且copy到heap中的block拥有该</strong>block。</p>
+<pre><code>__block int <span class="keyword">val</span> = <span class="number">0</span>;
+<span class="keyword">void</span> (^blk)(<span class="keyword">void</span>) = [^{++<span class="keyword">val</span>;} copy];
+++<span class="keyword">val</span>;
+blk();
+NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
+</code></pre><p>在block和外的++val都会变成 ++(val.<strong>forwarding-&gt;val);<br>当block copy到heap中后， stack中的</strong>forwarding会指向heap中的<strong>block, heap中的</strong>forwarding会指向自己的<strong>block值，这样保证了</strong>forwarding指向的是同一个变量值。</p>
+<p>Block什么时候会copy到heap中</p>
+<p>0）对block调用copy方法。</p>
+<p>1）block作为一个函数的返回值。 编译器自动copy</p>
+<p>2）赋值给id或block type class 有__strong 修饰符的成员变量。   编译器自动copy</p>
+<p>3）usingBlock, GCD API。  在函数内copy</p>
+<p>什么时候用该copy block？</p>
+<p>0） block是函数返回值</p>
+<p>1） block赋值给id或block type class 有__strong 修饰符的成员变量。</p>
+<p>2）3）usingBlock, GCD API。  在函数内copy</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2014/04/06/iOS-Block实现探究/" data-id="cl59ldwd1001ixxz5alqk8rvj" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-UIApplicationDelegate-启动选项介绍" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2014/03/05/UIApplicationDelegate-启动选项介绍/" class="article-date">
@@ -118,7 +325,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/03/05/UIApplicationDelegate-启动选项介绍/" data-id="cl4kp32yh001tvjz6sz9a1y3c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/03/05/UIApplicationDelegate-启动选项介绍/" data-id="cl59ldwd7001vxxz5lhqtzneg" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -176,7 +383,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/" data-id="cl4kp32xw000qvjz6l9yfnduz" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/02/19/iOS7-nested-push-animation-can-result-in-corrupted/" data-id="cl59ldwci000sxxz54ninylon" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -225,7 +432,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/12/08/iOS-消息传递过程解析/" data-id="cl4kp32xy000uvjz6lr2uyq8x" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/12/08/iOS-消息传递过程解析/" data-id="cl59ldwcj000wxxz5e0kuyrxa" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -286,7 +493,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/27/iOS-KVO实现方式/" data-id="cl4kp32y90016vjz6j30njo8f" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/11/27/iOS-KVO实现方式/" data-id="cl59ldwct0018xxz5542p850m" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -330,7 +537,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/26/iOS-GCD-与-NSOperationQueue对比/" data-id="cl4kp32yb001cvjz6tac3kze7" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/11/26/iOS-GCD-与-NSOperationQueue对比/" data-id="cl59ldwcy001exxz5yz7iemwf" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -369,7 +576,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/14/iOS-获取本地设备IP地址/" data-id="cl4kp32xx000svjz6f8lssaw6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/11/14/iOS-获取本地设备IP地址/" data-id="cl59ldwci000uxxz5k3xxol4d" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -423,7 +630,7 @@ xy: &lt;TestClass: <span class="number">0</span>x104b10&gt; NSObject <span class
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/05/iOS-Crash类别总结/" data-id="cl4kp32yc001evjz6zlec1z60" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/11/05/iOS-Crash类别总结/" data-id="cl59ldwd0001gxxz5ucvds7oo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -509,7 +716,7 @@ cpsr = <span class="number">0x60000030</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/11/05/iOS-LLDB-console-debug总结/" data-id="cl4kp32y80014vjz6c0dplvw9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/11/05/iOS-LLDB-console-debug总结/" data-id="cl59ldwcs0016xxz5iry8msvt" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -595,67 +802,7 @@ cpsr = <span class="number">0x60000030</span>
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/10/29/iOS-KVO-Key-Value-Observing-总结/" data-id="cl4kp32y90018vjz61ucrx7y8" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS-block-总结" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2013/10/18/iOS-block-总结/" class="article-date">
-  <time datetime="2013-10-18T08:20:28.000Z" itemprop="datePublished">2013-10-18</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2013/10/18/iOS-block-总结/">iOS block 总结</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Block objects are a C-based language feature that you can use in your C, Objective-C, and C++ code. Blocks make it easy to define a self-contained unit of work.</p>
-<p>One of the key advantages of blocks is their ability to use variables from outside their own lexical scope. When you define a block inside a function or method, the block acts as a traditional code block would in some ways. For example, a block can read the values of variables defined in the parent scope. Variables accessed by the block are copied to the block data structure on the heap so that the block acan access them later. When blocks are added to a dispatch queue, these values must typically be left in a read-only format. However, blocks that are executed synchronously can also use variables that have the __block keyword prepended to return data back to the parent’s calling scope.</p>
-<p>You declare blocks inline with your code using a syntax that is similar to the syntax used for function pointers. The main difference between a block and a fuction pointer is that the block name is preceded with a caret (^) instead of an asterisk (*). Like a function pointer, you can pass arguments to a block and receive a return value from it.</p>
-<pre><code><span class="keyword">int</span> x = <span class="number">123</span>;
-<span class="keyword">int</span> y = <span class="number">456</span>;
-
-<span class="comment">// Block declaration and assignment</span>
-<span class="keyword">void</span> (^aBlock)(<span class="keyword">int</span>) = ^(<span class="keyword">int</span> z)
-{
-  <span class="built_in">printf</span>(<span class="string">"%d %d %d\n"</span>, x, y, z);
-};
-
-<span class="comment">// Execute the block</span>
-aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456 789</span>
-</code></pre><p>The following is a summary of some of the key guidelines you should consider when designing your blocks:</p>
-<ul>
-<li>For blocks that you plan to perform asynchronously using a dispatch queue, it is safe to capture scalar variables from the parent function or method and use them in the block. However, you should not try to capture large structures or other pointer-based variables that are allocated and deleted by the calling context. By the time your block is executed, the memory referenced by that pointer may be gone. Of course, it is safe to allocate memory yourself and explicitly hand off ownership of that memory to the block.</li>
-<li>Dispatch queues copy blocks that  are added to them, and they release blocks when they finish executing. In other words, you do not need to explicitly copy blocks before adding them to a queue.</li>
-<li>Although queues are more efficient than raw threads at executing small tasks, there is still overhead to creating blocks and executing them on a queue. If a block does too little work, it may be cheaper to execute it inline than dispatch it to a queue. The way to tell if a block is doing too little work is to gather metrics for each path using the performance tools and compare them.</li>
-<li>Do not cache data relative to the underlying thread and expect that data to be accessible from a different block. If tasks in the same queue need to share data, use the context  pointer of the dispatch queue to store the data instead.</li>
-<li>If your block creates more than a few Objective-C objects. you might want to enclose parts of your block’s code in an @autorelease block to handle the memory management for those objects. Although GCD dispatch queues have their own autorelease pools, they make no guarantees as to when those pools are drained. If your application is memory constrained, creating your own autorelease pool allows you to free up the memory for autoreleased objects at more regular intervals.</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2013/10/18/iOS-block-总结/" data-id="cl4kp32y50010vjz6g67jdc6r" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2013/10/29/iOS-KVO-Key-Value-Observing-总结/" data-id="cl59ldwcu001axxz5erraqr21" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -682,7 +829,7 @@ aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -691,7 +838,7 @@ aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/reading/" style="font-size: 12.5px;">reading</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/reading/" style="font-size: 15px;">reading</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
     </div>
   </div>
 
@@ -700,7 +847,7 @@ aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -710,6 +857,10 @@ aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/07/06/麦肯锡方法/">麦肯锡方法</a>
+          </li>
         
           <li>
             <a href="/2022/06/19/悉达多/">悉达多</a>
@@ -725,10 +876,6 @@ aBlock(<span class="number">789</span>); <span class="comment">//pritns: 123 456
         
           <li>
             <a href="/2022/05/30/Combine-Introduction/">Combine: Introduction</a>
-          </li>
-        
-          <li>
-            <a href="/2022/05/13/Swift-Source-Code-ContiguousArray/">Swift Source Code: ContiguousArray</a>
           </li>
         
       </ul>

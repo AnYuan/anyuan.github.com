@@ -61,6 +61,59 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-iOS应用文件路径简介-md" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/12/26/iOS应用文件路径简介-md/" class="article-date">
+  <time datetime="2015-12-26T07:18:21.000Z" itemprop="datePublished">2015-12-26</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/12/26/iOS应用文件路径简介-md/">iOS应用文件路径简介</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="iOS_标准目录结构">iOS 标准目录结构</h3><p>出于安全考虑，iOS只有特定目录可以写入数据。 当一款应用安装在设备上后，系统会创建一些系统目录给应用使用，一款应用只有权限访问其自己的路径下的数据。</p>
+<h2 id="AppName-app">AppName.app</h2><p>整个应用的bundle文件。此目录包含整个应用和其所使用到的所有资源。 <em>此路径不能写， 只可读</em>， 如果强行写入，会改变安装时在系统注册的该目录的签名，如果签名改变，系统会组织程序启动。</p>
+<h2 id="Documents/">Documents/</h2><p>用于存储用户产生的内容。 此目录会被iTunes<em>默认备份</em></p>
+<h2 id="Documents/Inbox">Documents/Inbox</h2><p>此目录用于保存用于其他应用打开的文件。 例如，Mail应用汇将和此应用有关的附件保存于这个路径。 Documents interaction Controllers 也会放文件于此目录。</p>
+<p>自己应用可以读取和删除此目录文件，但是<em>不能创建新文件或者写入已经存在的文件</em>， 如果要对该目录文件进行修改，请将要修改的文件移除到其他目录。<br><em>此目录默认被iTunes备份</em></p>
+<h2 id="Library/">Library/</h2><p>此目录用于保存非用户数据文件。 Library下的子目录可以用于保存那些不希望用户看到的数据文件。<em>不要用Library下的目录保存用户数据文件</em></p>
+<p>Library目录下(除了Caches目录及其子目录)会被<em>iTunes默认备份</em></p>
+<h2 id="tmp/">tmp/</h2><p>用于那些不需要在每次启动需要持久化的临时文件。手动删除那些此路径下不用的临时文件。当应用没有运行时，系统也许会删除此目录下的文件。</p>
+<p><em>此目录默认不会被iTunes备份</em></p>
+<h3 id="应用产生的文件应该放在哪">应用产生的文件应该放在哪</h3><p>为了避免iOS设备间同步和备份流程耗时太久，应该对文件归属目录的选择特别注意。</p>
+<ul>
+<li>将用户数据保存于 Documents/. 用户数据包括那些需要让暴露给用户的文件 — 用户可以创建，删除，编辑的文件。 例如，对于视频和音频应用，用户数据包括用户下载过的文件等。</li>
+<li>将应用创建的文件保存于Library/Application support/路径下。此目录下，用于保存应用自身使用，不暴露给用户的数据文件。包括数据文件，配置文件，模板文件和版本特定的资源文件等。</li>
+<li>谨记保存于Documents/ 和 Application support/ 目录下的文件是<em>默认备份的</em>。可以使用<code>[NSURL setResourceValue:forKey:error:]</code>使用<code>NSURLIsExcludeFromBackupKey</code> key. <em>任何可以被重新下载的文件，一定不要进行备份</em>。</li>
+<li>将数据缓存数据保存于Library/Caches 目录下。 缓存数据是那些没用该数据，应用也可以正常运行的数据， 但如果有缓存数据，会提高应用的性能。 例如，数据库缓存文件，可以下载的内容等。 <em>注意：系统也许会删除Caches/下的文件，来释放磁盘空间</em></li>
+</ul>
+<p>参考: <a href="https://developer.apple.com/library/ios/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html" target="_blank" rel="external">File System programming guide</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2015/12/26/iOS应用文件路径简介-md/" data-id="cl59ldwcf000pxxz5nv0y1fqt" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Protocol-Extensions" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/10/02/Protocol-Extensions/" class="article-date">
@@ -114,7 +167,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/10/02/Protocol-Extensions/" data-id="cl4kp32yo0028vjz65k5wf6a9" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/10/02/Protocol-Extensions/" data-id="cl59ldwdv002axxz5vjdeazo3" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Swift/">Swift</a></li></ul>
@@ -218,7 +271,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/09/13/iOS-7-9-新特性总结/" data-id="cl4kp32yd001ivjz6t5s16te6" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/09/13/iOS-7-9-新特性总结/" data-id="cl59ldwd2001kxxz5xgew1c8w" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -286,7 +339,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2015/08/08/SQLite-WAL-调研总结/" data-id="cl4kp32yk0022vjz6ra89q6cy" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2015/08/08/SQLite-WAL-调研总结/" data-id="cl59ldwdf0024xxz5prjh9zuw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SQLite/">SQLite</a></li></ul>
@@ -330,7 +383,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl4kp32yr002fvjz6flvoz31a" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/10/NSAutoreleasePool-实现原理/" data-id="cl59ldwe0002hxxz5f4iimgww" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -394,7 +447,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl4kp32wb0000vjz67imrjo2w" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/12/01/Best-Practices-for-Handling-Multitouch-Events/" data-id="cl59ldwan0000xxz5svqlxlcx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -452,7 +505,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl4kp32xz000wvjz6ljvg6yp1" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/26/iOS-企业证书签名包ipa无线安装服务器搭建注意事项/" data-id="cl59ldwck000yxxz5ff7dmdov" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -538,7 +591,7 @@ sudo pip <span class="keyword">install</span> MySQL_python
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/23/Linux-Web-py网站迁移Mac-OS-X/" data-id="cl4kp32yt002jvjz63bzl1p32" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/23/Linux-Web-py网站迁移Mac-OS-X/" data-id="cl59ldwe2002lxxz5zapt57ba" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -619,7 +672,7 @@ sudo pip <span class="keyword">install</span> MySQL_python
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/08/17/Linux-服务器高I-O-等待延迟问题查找/" data-id="cl4kp32ys002hvjz6nealwn0t" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/08/17/Linux-服务器高I-O-等待延迟问题查找/" data-id="cl59ldwe1002jxxz5wbt92lr0" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
@@ -796,214 +849,7 @@ dispatch_async(<span class="built_in">queue</span>, ^{
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/19/iOS-GCD常用函数总结/" data-id="cl4kp32ya001avjz6saa0fe4t" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-iOS-Block实现探究" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2014/04/06/iOS-Block实现探究/" class="article-date">
-  <time datetime="2014-04-06T08:22:21.000Z" itemprop="datePublished">2014-04-06</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2014/04/06/iOS-Block实现探究/">iOS Block实现探究</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>使用clang的rewrite-objc filename 可以将有block的c代码转换成cpp代码。从中可以看到block的实现。</p>
-<pre><code><span class="preprocessor">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span>
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-  <span class="keyword">void</span> (^blk)(<span class="keyword">void</span>) = ^{
-    <span class="built_in">printf</span>(<span class="string">"Block\n"</span>);
-  };
-  blk();
-  <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><p>使用clang rewrite-objc以后会看到block的实现</p>
-<pre><code><span class="keyword">struct</span> __main_block_impl_0 {
- <span class="keyword">struct</span> __block_impl <span class="keyword">impl</span>;
- <span class="keyword">struct</span> __main_block_desc_0* Desc;
-  __main_block_impl_0(void *fp, <span class="keyword">struct</span> __main_block_desc_0 *desc, <span class="keyword">int</span> flags=<span class="number">0</span>)
-{
-<span class="keyword">impl</span>.isa = &amp;_NSConcreteStackBlock;
-<span class="keyword">impl</span>.Flags = flags;
-<span class="keyword">impl</span>.FuncPtr = fp;
-Desc = desc;
- }
-};
-</code></pre><p>可以看到其实block是一个正常的OC类</p>
-<p>来看看block是怎样访问外部变量的</p>
-<pre><code><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-  <span class="keyword">int</span> dmy = <span class="number">256</span>;
-  <span class="keyword">int</span> val = <span class="number">10</span>;
-  <span class="keyword">const</span> <span class="keyword">char</span> *fmt = <span class="string">"val = %d\n"</span>;
-  <span class="keyword">void</span> (^blk)(<span class="keyword">void</span>) = ^{
-    <span class="built_in">printf</span>(fmt, val);
-  };
-  <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><p>转换之后，可以看到</p>
-<pre><code><span class="keyword">struct</span> __main_block_impl_0 {
-  <span class="keyword">struct</span> __block_impl impl;
-  <span class="keyword">struct</span> __main_block_desc_0* Desc;
-  <span class="keyword">const</span> <span class="keyword">char</span> *fmt;
-  <span class="keyword">int</span> val;
-  __main_block_impl_0(<span class="keyword">void</span> *fp, <span class="keyword">struct</span> __main_block_desc_0 *desc, <span class="keyword">const</span> <span class="keyword">char</span> *_fmt, <span class="keyword">int</span> _val, <span class="keyword">int</span> flags=<span class="number">0</span>) : fmt(_fmt), val(_val) {
-impl.isa = &amp;_NSConcreteStackBlock;
-impl.Flags = flags;
-impl.FuncPtr = fp;
-Desc = desc;
-  }
-};
-
-
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-  <span class="keyword">int</span> dmy = <span class="number">256</span>;
-  <span class="keyword">int</span> val = <span class="number">10</span>;
-  <span class="keyword">const</span> <span class="keyword">char</span> *fmt = <span class="string">"val = %d\n"</span>;
-  <span class="keyword">void</span> (*blk)(<span class="keyword">void</span>) = (<span class="keyword">void</span> (*)())&amp;__main_block_impl_0((<span class="keyword">void</span> *)__main_block_func_0, &amp;__main_block_desc_0_DATA, fmt, val);
-  <span class="keyword">return</span> <span class="number">0</span>;
-}
-</code></pre><p>block的变量会被复制进block中</p>
-<p>如果当block要改变传入的变量值怎么办？首先看一下全局变量和本地静态变量</p>
-<pre><code><span class="keyword">int</span> global_val = <span class="number">1</span>;
-<span class="keyword">static</span> <span class="keyword">int</span> static_global_val = <span class="number">2</span>;
-<span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span>
-</span>{
-  <span class="keyword">static</span> <span class="keyword">int</span> static_val = <span class="number">3</span>;
-  <span class="keyword">void</span>(^blk)(<span class="keyword">void</span>) = ^{
-  global_val *= <span class="number">1</span>;
-   static_global_val *= <span class="number">2</span>;
-  static_val *= <span class="number">3</span>;
-  };
-  blk();
-  <span class="keyword">return</span> <span class="number">0</span>;
-}
-
-
-
-<span class="keyword">struct</span> __main_block_impl_0 {
-  <span class="keyword">struct</span> __block_impl impl;
-  <span class="keyword">struct</span> __main_block_desc_0* Desc;
-  <span class="keyword">int</span> *static_val;
-  __main_block_impl_0(<span class="keyword">void</span> *fp, <span class="keyword">struct</span> __main_block_desc_0 *desc, <span class="keyword">int</span> *_static_val, <span class="keyword">int</span> flags=<span class="number">0</span>) : static_val(_static_val) {
-impl.isa = &amp;_NSConcreteStackBlock;
-impl.Flags = flags;
-impl.FuncPtr = fp;
-Desc = desc;
-  }
-};
-<span class="keyword">static</span> <span class="keyword">void</span> __main_block_func_0(<span class="keyword">struct</span> __main_block_impl_0 *__cself) {
-  <span class="keyword">int</span> *static_val = __cself-&gt;static_val; <span class="comment">// bound by copy</span>
-
-global_val *= <span class="number">1</span>;
-static_global_val *= <span class="number">2</span>;
-(*static_val) *= <span class="number">3</span>;
-}
-</code></pre><p>由于全局变量是在Data Section中，所以直接可以访问。局部静态变量是通过将其指针传入到block中，block就可以对其值进行修改。</p>
-<p>然后看一下__block修饰符变量</p>
-<pre><code><span class="type">int</span> main()
-{
-  __block <span class="type">int</span> val = <span class="number">10</span>;
-  <span class="type">void</span> (^blk)(<span class="type">void</span>) = ^{val = <span class="number">1</span>;};
-  blk();
-  <span class="keyword">return</span> <span class="number">0</span>;
-}
-
-struct __main_block_impl_0 {
-  struct __block_impl impl;
-  struct __main_block_desc_0* <span class="type">Desc</span>;
-  __Block_byref_val_0 *val; // by <span class="keyword">ref</span>
-  __main_block_impl_0(<span class="type">void</span> *fp, struct __main_block_desc_0 *desc,             __Block_byref_val_0 *_val, <span class="type">int</span> flags=<span class="number">0</span>) : val(_val-&gt;__forwarding) {
-impl.isa = &amp;_NSConcreteStackBlock;
-impl.<span class="type">Flags</span> = flags;
-impl.<span class="type">FuncPtr</span> = fp;
-<span class="type">Desc</span> = desc;
-  }
-};
-<span class="keyword">static</span> <span class="type">void</span> __main_block_func_0(struct __main_block_impl_0 *__cself) {
-  __Block_byref_val_0 *val = __cself-&gt;val; // bound by <span class="keyword">ref</span>
-(val-&gt;__forwarding-&gt;val) = <span class="number">1</span>;}
-<span class="keyword">static</span> <span class="type">void</span> __main_block_copy_0(struct __main_block_impl_0*dst, struct __main_block_impl_0*src)
-</code></pre><p><strong>block修饰符的变量，会生成一个</strong>Block_byref_val_0的struct，然后通过访问其<strong>forwarding来访问val值。因为Block有可能是在stack或者heap中，所以用</strong>forwarding来访问。之所以会将__block单独生成一个struct是因为可能该变量会被多个block使用。</p>
-<p>Block分三种类型</p>
-<p>0) NSConcreteStackBlock    –stack</p>
-<p>1) NSConcreteGlobalBlock   –data area</p>
-<p>2) NSConcreteMallocBlock   –heap</p>
-<p>自动copy block</p>
-<p>当开启ARC时，在某些情况编译器会自动copy block，从stack到heap。</p>
-<pre><code><span class="keyword">typedef</span> <span class="keyword">int</span> （^<span class="keyword">blk_t</span>)(<span class="keyword">int</span>);
-<span class="keyword">blk_t</span> func(<span class="keyword">int</span> rate)
-{
-  <span class="keyword">return</span> ^(<span class="keyword">int</span> count){<span class="keyword">return</span> rate * count;};
-}
-
-
-<span class="keyword">blk_t</span> func(<span class="keyword">int</span> rate)
-{
-  <span class="keyword">blk_t</span> tmp = &amp;__func_block_impl_0(
-__func_block_func_0, &amp;__func_block_desc_0_DATA, rate);
-
-  tmp = objc_retainBlock(tmp);
-  <span class="keyword">return</span> objc_autoreleaseReturnValue(tmp);
-}
-</code></pre><p>有些情况，编译器是无法检测是否应该copy block：</p>
-<p>当block作为参数传递到方法或函数中。</p>
-<p>但是，如果该方法或函数在内部copy，就不用手动再copy：</p>
-<p>0）cocoa framework方法， 有usingBlock</p>
-<p>1) GCD API</p>
-<pre><code>- (<span class="keyword">id</span>) getBlockArray
-{
-  <span class="keyword">int</span> val = <span class="number">10</span>;
-  <span class="keyword">return</span> [[<span class="built_in">NSArray</span> alloc] initWithObjects:
- [^{<span class="built_in">NSLog</span>(<span class="string">@"blk0:%d"</span>, val);} <span class="keyword">copy</span>],
- [^{<span class="built_in">NSLog</span>(<span class="string">@"blk1:%d"</span>, val);} <span class="keyword">copy</span>], <span class="literal">nil</span>];
-}
-</code></pre><p>__forwarding</p>
-<p>当block从stack copy到 heap中时，block中用到的<strong>block也会copy到heap中，并且copy到heap中的block拥有该</strong>block。</p>
-<pre><code>__block int <span class="keyword">val</span> = <span class="number">0</span>;
-<span class="keyword">void</span> (^blk)(<span class="keyword">void</span>) = [^{++<span class="keyword">val</span>;} copy];
-++<span class="keyword">val</span>;
-blk();
-NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
-</code></pre><p>在block和外的++val都会变成 ++(val.<strong>forwarding-&gt;val);<br>当block copy到heap中后， stack中的</strong>forwarding会指向heap中的<strong>block, heap中的</strong>forwarding会指向自己的<strong>block值，这样保证了</strong>forwarding指向的是同一个变量值。</p>
-<p>Block什么时候会copy到heap中</p>
-<p>0）对block调用copy方法。</p>
-<p>1）block作为一个函数的返回值。 编译器自动copy</p>
-<p>2）赋值给id或block type class 有__strong 修饰符的成员变量。   编译器自动copy</p>
-<p>3）usingBlock, GCD API。  在函数内copy</p>
-<p>什么时候用该copy block？</p>
-<p>0） block是函数返回值</p>
-<p>1） block赋值给id或block type class 有__strong 修饰符的成员变量。</p>
-<p>2）3）usingBlock, GCD API。  在函数内copy</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2014/04/06/iOS-Block实现探究/" data-id="cl4kp32yd001gvjz6ew6ralwu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2014/04/19/iOS-GCD常用函数总结/" data-id="cl59ldwcv001cxxz5nqhb3fj9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/iOS/">iOS</a></li></ul>
@@ -1030,7 +876,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SQLite/">SQLite</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Unix/">Unix</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/combine/">combine</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a><span class="tag-list-count">20</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/life/">life</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux-archlinux/">linux, archlinux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/phonegap/">phonegap</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/programming/">programming</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/reading/">reading</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/swift-source-code/">swift source code</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/算法/">算法</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编辑器配置文件/">编辑器配置文件</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/读书/">读书</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1039,7 +885,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/reading/" style="font-size: 12.5px;">reading</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
+      <a href="/tags/C/" style="font-size: 17.5px;">C</a> <a href="/tags/SQLite/" style="font-size: 10px;">SQLite</a> <a href="/tags/Swift/" style="font-size: 10px;">Swift</a> <a href="/tags/Unix/" style="font-size: 10px;">Unix</a> <a href="/tags/combine/" style="font-size: 12.5px;">combine</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/life/" style="font-size: 10px;">life</a> <a href="/tags/linux/" style="font-size: 15px;">linux</a> <a href="/tags/linux-archlinux/" style="font-size: 10px;">linux, archlinux</a> <a href="/tags/phonegap/" style="font-size: 10px;">phonegap</a> <a href="/tags/programming/" style="font-size: 10px;">programming</a> <a href="/tags/reading/" style="font-size: 15px;">reading</a> <a href="/tags/swift-source-code/" style="font-size: 15px;">swift source code</a> <a href="/tags/算法/" style="font-size: 10px;">算法</a> <a href="/tags/编辑器配置文件/" style="font-size: 10px;">编辑器配置文件</a> <a href="/tags/读书/" style="font-size: 10px;">读书</a>
     </div>
   </div>
 
@@ -1048,7 +894,7 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/07/">七月 2022</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/06/">六月 2022</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2022/05/">五月 2022</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/03/">三月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/01/">一月 2021</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/12/">十二月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/10/">十月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/09/">九月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/08/">八月 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/12/">十二月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/08/">八月 2014</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/04/">四月 2014</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/03/">三月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2014/02/">二月 2014</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/12/">十二月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/11/">十一月 2013</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/10/">十月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/08/">八月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/07/">七月 2013</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/06/">六月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/05/">五月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/03/">三月 2013</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2013/01/">一月 2013</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/12/">十二月 2012</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/11/">十一月 2012</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2012/05/">五月 2012</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -1058,6 +904,10 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
     <h3 class="widget-title">Recents</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2022/07/06/麦肯锡方法/">麦肯锡方法</a>
+          </li>
         
           <li>
             <a href="/2022/06/19/悉达多/">悉达多</a>
@@ -1073,10 +923,6 @@ NSLog(<span class="string">@"%d"</span>, <span class="keyword">val</span>);
         
           <li>
             <a href="/2022/05/30/Combine-Introduction/">Combine: Introduction</a>
-          </li>
-        
-          <li>
-            <a href="/2022/05/13/Swift-Source-Code-ContiguousArray/">Swift Source Code: ContiguousArray</a>
           </li>
         
       </ul>
